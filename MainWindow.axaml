@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="PrimSCADA.MainWindow"
+        Title="PrimSCADA" WindowState="Maximized">
+    <Grid RowDefinitions="30">
+        <Menu Grid.Row="0">
+            <MenuItem Header="File">
+                <MenuItem Header="New" Click="MenuItem_OnClickNew"></MenuItem>
+                <MenuItem Header="Open"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="Save"></MenuItem>
+                <MenuItem Header="Save all"></MenuItem>
+                <MenuItem Header="Save as..."></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="Exit" Click="MenuItem_OnClickExit"></MenuItem>
+            </MenuItem>
+        </Menu>
+    </Grid>
+</Window>
