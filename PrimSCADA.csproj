@@ -16,8 +16,5 @@
       <Compile Update="NewWindow.cs">
         <DependentUpon>NewWindow.axaml</DependentUpon>
       </Compile>
-      <Compile Update="MainWindow.axaml.cs">
-        <DependentUpon>MainWindow.axaml</DependentUpon>
-      </Compile>
     </ItemGroup>
 </Project>
