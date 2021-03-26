@@ -1,7 +1,10 @@
-﻿using Avalonia;
+﻿using System;
+using System.Drawing;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Rectangle = Avalonia.Controls.Shapes.Rectangle;
 
 namespace PrimSCADA
 {
@@ -41,6 +44,20 @@ namespace PrimSCADA
         private void Button_OnClick(object? sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void StyledElement_OnInitialized(object? sender, EventArgs e)
+        {
+            Screens screens = new Window().Screens;
+            PixelRect pr = screens.Primary.Bounds;
+            PixelPoint pp = new PixelPoint(pr.BottomRight.X / 5, pr.BottomRight.Y / 5) ;
+            Position = pp;
+        }
+
+        private void RectangleBound_OnPointerMoved(object? sender, PointerEventArgs e)
+        {
+            PointerPoint pp = e.GetCurrentPoint(this.FindControl<Rectangle>("RectangleBound"));
+            ;
         }
     }
 }
