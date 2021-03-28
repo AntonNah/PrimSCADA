@@ -5,13 +5,13 @@
         mc:Ignorable="d" 
         x:Class="PrimSCADA.NewWindow"
         Width="1024" Height="800"
-        Title="PrimSCADA" ShowInTaskbar="False" SystemDecorations="BorderOnly" Initialized="StyledElement_OnInitialized" CanResize="True">
+        Title="PrimSCADA" ShowInTaskbar="False" SystemDecorations="BorderOnly" Initialized="NewWindow_OnInitialized" CanResize="True" Opened="TopLevel_OnOpened">
     <Grid RowDefinitions="30, *">
         <Rectangle Fill="Blue" PointerPressed="InputElement_OnPointerPressed" PointerReleased="InputElement_OnPointerReleased" PointerMoved="InputElement_OnPointerMoved" PointerLeave="InputElement_OnPointerLeave"></Rectangle>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Background="Red" Click="Button_OnClick">X</Button>
         </StackPanel>
-        <Rectangle Name="RectangleBound" Grid.Row="1" StrokeThickness="2" Stroke="Black" PointerMoved="RectangleBound_OnPointerMoved"></Rectangle>
+        <Rectangle Name="RectangleBound" Grid.Row="1" StrokeThickness="2" Stroke="Black" PointerMoved="RectangleBound_OnPointerMoved" PointerLeave="RectangleBound_OnPointerLeave" PointerPressed="RectangleBound_OnPointerPressed" PointerReleased="RectangleBound_OnPointerReleased"></Rectangle>
     </Grid>
 </Window>
         
