@@ -68,6 +68,12 @@ namespace PrimSCADA
                 Cursor = new Cursor(StandardCursorType.LeftSide);
                 if (IsLeftClickRectangleBoundWindow)
                 {
+                    double x = _PointerPoint.Position.X - e.GetCurrentPoint(null).Position.X;
+                    double y = _PointerPoint.Position.Y - e.GetCurrentPoint(null).Position.Y;
+                
+                    PixelPoint pp = new PixelPoint((Position.X - (int)x), (Position.Y - (int)y));
+
+                    Position = pp;
                     RectangleBoundWindow.
                 }
             }
@@ -93,6 +99,7 @@ namespace PrimSCADA
             if (PointRectangleBoundWindow.Y > RectangleBoundWindow.StrokeThickness && PointRectangleBoundWindow.X == 0)
             {
                 IsLeftClickRectangleBoundWindow = true;
+                PointerPointRectangleBoundWindow = e.GetCurrentPoint(null);
             }
             else if (PointRectangleBoundWindow.X == rect.Width - 1 &&
                      PointRectangleBoundWindow.Y > RectangleBoundWindow.StrokeThickness)
