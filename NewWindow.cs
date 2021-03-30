@@ -17,6 +17,7 @@ namespace PrimSCADA
         private PixelPoint _PixelPoint;
         private Point PointRectangleBoundWindow;
         private bool IsLeftClickRectangleBoundWindow;
+        private double RectangleBoundWindowWidth;
         private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
         {
             _PointerPoint = e.GetCurrentPoint(null);
@@ -68,13 +69,8 @@ namespace PrimSCADA
                 Cursor = new Cursor(StandardCursorType.LeftSide);
                 if (IsLeftClickRectangleBoundWindow)
                 {
-                    double x = _PointerPoint.Position.X - e.GetCurrentPoint(null).Position.X;
-                    double y = _PointerPoint.Position.Y - e.GetCurrentPoint(null).Position.Y;
-                
-                    PixelPoint pp = new PixelPoint((Position.X - (int)x), (Position.Y - (int)y));
-
-                    Position = pp;
-                    RectangleBoundWindow.
+                    double y = PointerPointRectangleBoundWindow.Position.Y - e.GetCurrentPoint(null).Position.Y;
+                    RectangleBoundWindow.Width = RectangleBoundWindow.Width - y;
                 }
             }
             else if (PointRectangleBoundWindow.X == rect.Width - 1 &&
@@ -100,6 +96,7 @@ namespace PrimSCADA
             {
                 IsLeftClickRectangleBoundWindow = true;
                 PointerPointRectangleBoundWindow = e.GetCurrentPoint(null);
+                RectangleBoundWindowWidth = RectangleBoundWindow.Width;
             }
             else if (PointRectangleBoundWindow.X == rect.Width - 1 &&
                      PointRectangleBoundWindow.Y > RectangleBoundWindow.StrokeThickness)
