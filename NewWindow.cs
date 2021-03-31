@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Point = Avalonia.Point;
 using Rectangle = Avalonia.Controls.Shapes.Rectangle;
 
@@ -62,17 +63,7 @@ namespace PrimSCADA
         {
             Rect rect = RectangleBoundWindow.Bounds;
             PointRectangleBoundWindow = e.GetCurrentPoint(RectangleBoundWindow).Position;
-            if (IsLeftClickRectangleBoundWindow)
-            {
-                // double y = PointerPointRectangleBoundWindow.Position.X - e.GetCurrentPoint(null).Position.X;
-                //this.Width -= y;
-                
-                double x = PointerPointRectangleBoundWindow.Position.X - e.GetCurrentPoint(null).Position.X;
 
-                PixelPoint pp = new PixelPoint((Position.X - (int)x), (int)RectangleBoundWindowWidth);
-
-                Position = pp;
-            }
             if (PointRectangleBoundWindow.Y > RectangleBoundWindow.StrokeThickness && PointRectangleBoundWindow.X == 0)
             {
                 Cursor = new Cursor(StandardCursorType.LeftSide);
@@ -110,6 +101,18 @@ namespace PrimSCADA
         private void RectangleBound_OnPointerReleased(object? sender, PointerReleasedEventArgs e)
         {
             IsLeftClickRectangleBoundWindow = false;
+        }
+
+        private void NewWindow_OnPointerMoved(object? sender, PointerEventArgs e)
+        {
+            if (IsLeftClickRectangleBoundWindow)
+            {
+                double x = PointerPointRectangleBoundWindow.Position.X - e.GetCurrentPoint(null).Position.X;
+
+                PixelPoint pp = new PixelPoint((Position.X - (int)x), (int)RectangleBoundWindowWidth);
+
+                Position = pp;
+            }
         }
     }
 }

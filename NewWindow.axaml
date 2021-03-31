@@ -5,7 +5,7 @@
         mc:Ignorable="d" 
         x:Class="PrimSCADA.NewWindow"
         Width="1024" Height="800"
-        Title="PrimSCADA" ShowInTaskbar="False" SystemDecorations="BorderOnly" Initialized="NewWindow_OnInitialized" CanResize="True" Opened="TopLevel_OnOpened">
+        Title="PrimSCADA" ShowInTaskbar="False" SystemDecorations="BorderOnly" Initialized="NewWindow_OnInitialized" CanResize="True" Opened="TopLevel_OnOpened" PointerMoved="NewWindow_OnPointerMoved">
     <Grid RowDefinitions="30, *">
         <Rectangle Fill="Blue" PointerPressed="InputElement_OnPointerPressed" PointerReleased="InputElement_OnPointerReleased" PointerMoved="InputElement_OnPointerMoved" PointerLeave="InputElement_OnPointerLeave"></Rectangle>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
