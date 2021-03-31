@@ -14,14 +14,12 @@ namespace PrimSCADA
         private Rectangle RectangleBoundWindow;
         private PointerPoint? _PointerPoint;
         private PointerPoint PointerPointRectangleBoundWindow;
-        private PixelPoint _PixelPoint;
         private Point PointRectangleBoundWindow;
         private bool IsLeftClickRectangleBoundWindow;
         private double RectangleBoundWindowWidth;
         private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
         {
             _PointerPoint = e.GetCurrentPoint(null);
-            _PixelPoint = Position;
         }
 
         private void InputElement_OnPointerReleased(object? sender, PointerReleasedEventArgs e)
@@ -64,14 +62,20 @@ namespace PrimSCADA
         {
             Rect rect = RectangleBoundWindow.Bounds;
             PointRectangleBoundWindow = e.GetCurrentPoint(RectangleBoundWindow).Position;
+            if (IsLeftClickRectangleBoundWindow)
+            {
+                // double y = PointerPointRectangleBoundWindow.Position.X - e.GetCurrentPoint(null).Position.X;
+                //this.Width -= y;
+                
+                double x = PointerPointRectangleBoundWindow.Position.X - e.GetCurrentPoint(null).Position.X;
+
+                PixelPoint pp = new PixelPoint((Position.X - (int)x), (int)RectangleBoundWindowWidth);
+
+                Position = pp;
+            }
             if (PointRectangleBoundWindow.Y > RectangleBoundWindow.StrokeThickness && PointRectangleBoundWindow.X == 0)
             {
                 Cursor = new Cursor(StandardCursorType.LeftSide);
-                if (IsLeftClickRectangleBoundWindow)
-                {
-                    double y = PointerPointRectangleBoundWindow.Position.Y - e.GetCurrentPoint(null).Position.Y;
-                    RectangleBoundWindow.Width = RectangleBoundWindow.Width - y;
-                }
             }
             else if (PointRectangleBoundWindow.X == rect.Width - 1 &&
                      PointRectangleBoundWindow.Y > RectangleBoundWindow.StrokeThickness)
@@ -96,7 +100,7 @@ namespace PrimSCADA
             {
                 IsLeftClickRectangleBoundWindow = true;
                 PointerPointRectangleBoundWindow = e.GetCurrentPoint(null);
-                RectangleBoundWindowWidth = RectangleBoundWindow.Width;
+                RectangleBoundWindowWidth = PointerPointRectangleBoundWindow.Position.Y;
             }
             else if (PointRectangleBoundWindow.X == rect.Width - 1 &&
                      PointRectangleBoundWindow.Y > RectangleBoundWindow.StrokeThickness)
