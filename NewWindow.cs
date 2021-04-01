@@ -20,6 +20,7 @@ namespace PrimSCADA
         private double RectangleBoundWindowWidth;
         private bool IsRightClickRectangleBoundWindow;
         private bool IsBottomClickRectangleBoundWindow;
+        private bool IsBottomLeftClickRectangleBoundWindow;
         private double xdiff;
         private double ydiff;
         private double PointerPointRectangleBoundWindowX;
@@ -70,24 +71,27 @@ namespace PrimSCADA
             Rect rect = RectangleBoundWindow.Bounds;
             PointRectangleBoundWindow = e.GetCurrentPoint(RectangleBoundWindow).Position;
 
-            if (PointRectangleBoundWindow.Y > RectangleBoundWindow.StrokeThickness && PointRectangleBoundWindow.X == 0)
+            if (PointRectangleBoundWindow.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3) && 
+                PointRectangleBoundWindow.X <= RectangleBoundWindow.StrokeThickness)
             {
                 Cursor = new Cursor(StandardCursorType.LeftSide);
             }
             else if (PointRectangleBoundWindow.X >= rect.Width - RectangleBoundWindow.StrokeThickness &&
-                     PointRectangleBoundWindow.Y > RectangleBoundWindow.StrokeThickness)
+                     PointRectangleBoundWindow.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3))
             {
+                if(!IsCursor)
                 Cursor = new Cursor(StandardCursorType.RightSide);
             }
             else if (PointRectangleBoundWindow.Y >= rect.Height - RectangleBoundWindow.StrokeThickness && 
-                     PointRectangleBoundWindow.X > RectangleBoundWindow.StrokeThickness)
+                     PointRectangleBoundWindow.X > RectangleBoundWindow.StrokeThickness + 3 &&
+                     PointRectangleBoundWindow.X < rect.Width - (RectangleBoundWindow.StrokeThickness + 3))
             {
                 Cursor = new Cursor(StandardCursorType.BottomSide);
             }
             else if (PointRectangleBoundWindow.X <= RectangleBoundWindow.StrokeThickness &&
-                     PointRectangleBoundWindow.Y >= rect.Height - RectangleBoundWindow.StrokeThickness)
+                     PointRectangleBoundWindow.Y >= rect.Height - (RectangleBoundWindow.StrokeThickness +3))
             {
-                Cursor = new Cursor(StandardCursorType.SizeAll);
+                Cursor = new Cursor(StandardCursorType.BottomLeftCorner);
             }
         }
 
@@ -109,19 +113,27 @@ namespace PrimSCADA
             PointerPointRectangleBoundWindowX = PointerPointRectangleBoundWindow.Position.X;
             PointerPointRectangleBoundWindowY = PointerPointRectangleBoundWindow.Position.Y;
             RectangleBoundWindowWidth = Position.Y;
-            if (PointRectangleBoundWindow.Y > RectangleBoundWindow.StrokeThickness && PointRectangleBoundWindow.X <= RectangleBoundWindow.StrokeThickness)
+            
+            if (PointRectangleBoundWindow.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3) && 
+                PointRectangleBoundWindow.X <= RectangleBoundWindow.StrokeThickness)
             {
                 IsLeftClickRectangleBoundWindow = true;
             }
             else if (PointRectangleBoundWindow.X >= rect.Width - RectangleBoundWindow.StrokeThickness &&
-                     PointRectangleBoundWindow.Y >= RectangleBoundWindow.StrokeThickness)
+                     PointRectangleBoundWindow.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3))
             {
                 IsRightClickRectangleBoundWindow = true;
             }
-            else if (PointRectangleBoundWindow.Y >= rect.Height - RectangleBoundWindow.StrokeThickness &&
-                     PointRectangleBoundWindow.X > RectangleBoundWindow.StrokeThickness)
+            else if (PointRectangleBoundWindow.Y >= rect.Height - RectangleBoundWindow.StrokeThickness && 
+                     PointRectangleBoundWindow.X > RectangleBoundWindow.StrokeThickness + 3 &&
+                     PointRectangleBoundWindow.X < rect.Width - (RectangleBoundWindow.StrokeThickness + 3))
             {
                 IsBottomClickRectangleBoundWindow = true;
+            }
+            else if (PointRectangleBoundWindow.X <= RectangleBoundWindow.StrokeThickness &&
+                     PointRectangleBoundWindow.Y >= rect.Height - (RectangleBoundWindow.StrokeThickness +3))
+            {
+                IsBottomLeftClickRectangleBoundWindow = true;
             }
         }
 
@@ -130,6 +142,7 @@ namespace PrimSCADA
             IsLeftClickRectangleBoundWindow = false;
             IsRightClickRectangleBoundWindow = false;
             IsBottomClickRectangleBoundWindow = false;
+            IsBottomLeftClickRectangleBoundWindow = false;
         }
 
         private void NewWindow_OnPointerMoved(object? sender, PointerEventArgs e)
@@ -152,6 +165,14 @@ namespace PrimSCADA
                 PointerPointRectangleBoundWindowX = e.GetCurrentPoint(null).Position.X;
             }
             else if (IsBottomClickRectangleBoundWindow)
+            {
+                double y = PointerPointRectangleBoundWindowY - e.GetCurrentPoint(null).Position.Y;
+                if(y != ydiff)
+                    Height = Height - y;
+                ydiff = y;
+                PointerPointRectangleBoundWindowY = e.GetCurrentPoint(null).Position.Y;
+            }
+            else if (IsBottomLeftClickRectangleBoundWindow)
             {
                 double y = PointerPointRectangleBoundWindowY - e.GetCurrentPoint(null).Position.Y;
                 if(y != ydiff)
