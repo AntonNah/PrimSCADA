@@ -21,6 +21,7 @@ namespace PrimSCADA
         private bool IsRightClickRectangleBoundWindow;
         private bool IsBottomClickRectangleBoundWindow;
         private bool IsBottomLeftClickRectangleBoundWindow;
+        private bool IsCursorCapture;
         private double xdiff;
         private double ydiff;
         private double PointerPointRectangleBoundWindowX;
@@ -74,24 +75,35 @@ namespace PrimSCADA
             if (PointRectangleBoundWindow.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3) && 
                 PointRectangleBoundWindow.X <= RectangleBoundWindow.StrokeThickness)
             {
-                Cursor = new Cursor(StandardCursorType.LeftSide);
+                if (!IsCursorCapture)
+                {
+                    Cursor = new Cursor(StandardCursorType.LeftSide);
+                }
             }
             else if (PointRectangleBoundWindow.X >= rect.Width - RectangleBoundWindow.StrokeThickness &&
                      PointRectangleBoundWindow.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3))
             {
-                if(!IsCursor)
-                Cursor = new Cursor(StandardCursorType.RightSide);
+                if (!IsCursorCapture)
+                {
+                    Cursor = new Cursor(StandardCursorType.RightSide);
+                }
             }
             else if (PointRectangleBoundWindow.Y >= rect.Height - RectangleBoundWindow.StrokeThickness && 
                      PointRectangleBoundWindow.X > RectangleBoundWindow.StrokeThickness + 3 &&
                      PointRectangleBoundWindow.X < rect.Width - (RectangleBoundWindow.StrokeThickness + 3))
             {
-                Cursor = new Cursor(StandardCursorType.BottomSide);
+                if (!IsCursorCapture)
+                {
+                    Cursor = new Cursor(StandardCursorType.BottomSide);
+                }
             }
             else if (PointRectangleBoundWindow.X <= RectangleBoundWindow.StrokeThickness &&
                      PointRectangleBoundWindow.Y >= rect.Height - (RectangleBoundWindow.StrokeThickness +3))
             {
-                Cursor = new Cursor(StandardCursorType.BottomLeftCorner);
+                if (!IsCursorCapture)
+                {
+                    Cursor = new Cursor(StandardCursorType.BottomLeftCorner);
+                }
             }
         }
 
@@ -117,22 +129,26 @@ namespace PrimSCADA
             if (PointRectangleBoundWindow.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3) && 
                 PointRectangleBoundWindow.X <= RectangleBoundWindow.StrokeThickness)
             {
+                IsCursorCapture = true;
                 IsLeftClickRectangleBoundWindow = true;
             }
             else if (PointRectangleBoundWindow.X >= rect.Width - RectangleBoundWindow.StrokeThickness &&
                      PointRectangleBoundWindow.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3))
             {
+                IsCursorCapture = true;
                 IsRightClickRectangleBoundWindow = true;
             }
             else if (PointRectangleBoundWindow.Y >= rect.Height - RectangleBoundWindow.StrokeThickness && 
                      PointRectangleBoundWindow.X > RectangleBoundWindow.StrokeThickness + 3 &&
                      PointRectangleBoundWindow.X < rect.Width - (RectangleBoundWindow.StrokeThickness + 3))
             {
+                IsCursorCapture = true;
                 IsBottomClickRectangleBoundWindow = true;
             }
             else if (PointRectangleBoundWindow.X <= RectangleBoundWindow.StrokeThickness &&
                      PointRectangleBoundWindow.Y >= rect.Height - (RectangleBoundWindow.StrokeThickness +3))
             {
+                IsCursorCapture = true;
                 IsBottomLeftClickRectangleBoundWindow = true;
             }
         }
@@ -143,6 +159,7 @@ namespace PrimSCADA
             IsRightClickRectangleBoundWindow = false;
             IsBottomClickRectangleBoundWindow = false;
             IsBottomLeftClickRectangleBoundWindow = false;
+            IsCursorCapture = false;
         }
 
         private void NewWindow_OnPointerMoved(object? sender, PointerEventArgs e)
