@@ -4,14 +4,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" 
         x:Class="PrimSCADA.NewWindow"
-        Width="1024" Height="800"
-        Title="PrimSCADA" ShowInTaskbar="False" SystemDecorations="BorderOnly" Initialized="NewWindow_OnInitialized" CanResize="True" Opened="TopLevel_OnOpened" PointerMoved="NewWindow_OnPointerMoved">
+        Width="1024" Height="800" MinHeight="200" MaxHeight="850" MinWidth="200" MaxWidth="1100"
+        Title="PrimSCADA" ShowInTaskbar="False" SystemDecorations="BorderOnly" Initialized="NewWindowOnInitialized" CanResize="True" Opened="NewWindowOnOpened" PointerMoved="NewWindowOnPointerMoved">
     <Grid RowDefinitions="30, *">
-        <Rectangle Fill="Blue" PointerPressed="InputElement_OnPointerPressed" PointerReleased="InputElement_OnPointerReleased" PointerMoved="InputElement_OnPointerMoved" PointerLeave="InputElement_OnPointerLeave"></Rectangle>
+        <Rectangle Name="Header" Fill="Blue" PointerPressed="HeaderOnPointerPressed" PointerReleased="HeaderOnPointerReleased" PointerMoved="HeaderOnPointerMoved" PointerLeave="HeaderOnPointerLeave"></Rectangle>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Background="Red" Click="Button_OnClick">X</Button>
+            <Button Name="BExit" Background="Red" Click="BExitOnClick">X</Button>
         </StackPanel>
-        <Rectangle Name="RectangleBound" Grid.Row="1" StrokeThickness="2" Stroke="Black" PointerMoved="RectangleBound_OnPointerMoved" PointerLeave="RectangleBound_OnPointerLeave" PointerPressed="RectangleBound_OnPointerPressed" PointerReleased="RectangleBound_OnPointerReleased"></Rectangle>
+        <Rectangle Name="RectangleBound" Grid.Row="1" StrokeThickness="2" Stroke="Black" PointerMoved="RectangleBoundOnPointerMoved" PointerLeave="RectangleBoundOnPointerLeave" PointerPressed="RectangleBoundOnPointerPressed" PointerReleased="RectangleBoundOnPointerReleased"></Rectangle>
     </Grid>
 </Window>
         

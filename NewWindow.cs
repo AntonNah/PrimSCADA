@@ -13,190 +13,248 @@ namespace PrimSCADA
     public class NewWindow : Window
     {
         private Rectangle RectangleBoundWindow;
-        private PointerPoint? _PointerPoint;
-        private PointerPoint PointerPointRectangleBoundWindow;
-        private Point PointRectangleBoundWindow;
+        private PointerPoint? PPHeaderClick;
+        private PointerPoint PPRectangleBoundClick;
+        private Point PRectangleBoundClick;
         private bool IsLeftClickRectangleBoundWindow;
         private double RectangleBoundWindowWidth;
         private bool IsRightClickRectangleBoundWindow;
         private bool IsBottomClickRectangleBoundWindow;
         private bool IsBottomLeftClickRectangleBoundWindow;
+        private bool IsBottomRightClickRectangleBoundWindow;
         private bool IsCursorCapture;
-        private double xdiff;
-        private double ydiff;
+        private bool IsCursorRightSideInit;
+        private bool IsCursorLeftSideInit;
+        private bool IsCursorBottomSideInit;
+        private bool IsCursorBottomLeftInit;
+        private bool IsCursorBottomRightInit;
+        private double Xdiff;
+        private double Ydiff;
         private double PointerPointRectangleBoundWindowX;
         private double PointerPointRectangleBoundWindowY;
-        private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
-        {
-            _PointerPoint = e.GetCurrentPoint(null);
-        }
-
-        private void InputElement_OnPointerReleased(object? sender, PointerReleasedEventArgs e)
-        {
-            _PointerPoint = null;
-        }
-
-        private void InputElement_OnPointerMoved(object? sender, PointerEventArgs e)
-        {
-            if (_PointerPoint != null)
-            {
-                double x = _PointerPoint.Position.X - e.GetCurrentPoint(null).Position.X;
-                double y = _PointerPoint.Position.Y - e.GetCurrentPoint(null).Position.Y;
-                
-                PixelPoint pp = new PixelPoint((Position.X - (int)x), (Position.Y - (int)y));
-
-                Position = pp;
-            }
-        }
-
-        private void InputElement_OnPointerLeave(object? sender, PointerEventArgs e)
-        {
-            _PointerPoint = null;
-        }
-
-        private void Button_OnClick(object? sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void NewWindow_OnInitialized(object? sender, EventArgs e)
+        
+        private void NewWindowOnInitialized(object? sender, EventArgs e)
         {
             Screens screens = new Window().Screens;
             PixelRect pr = screens.Primary.Bounds;
             PixelPoint pp = new PixelPoint(pr.BottomRight.X / 5, pr.BottomRight.Y / 5) ;
             Position = pp;
         }
-
-        private void RectangleBound_OnPointerMoved(object? sender, PointerEventArgs e)
-        {
-            Rect rect = RectangleBoundWindow.Bounds;
-            PointRectangleBoundWindow = e.GetCurrentPoint(RectangleBoundWindow).Position;
-
-            if (PointRectangleBoundWindow.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3) && 
-                PointRectangleBoundWindow.X <= RectangleBoundWindow.StrokeThickness)
-            {
-                if (!IsCursorCapture)
-                {
-                    Cursor = new Cursor(StandardCursorType.LeftSide);
-                }
-            }
-            else if (PointRectangleBoundWindow.X >= rect.Width - RectangleBoundWindow.StrokeThickness &&
-                     PointRectangleBoundWindow.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3))
-            {
-                if (!IsCursorCapture)
-                {
-                    Cursor = new Cursor(StandardCursorType.RightSide);
-                }
-            }
-            else if (PointRectangleBoundWindow.Y >= rect.Height - RectangleBoundWindow.StrokeThickness && 
-                     PointRectangleBoundWindow.X > RectangleBoundWindow.StrokeThickness + 3 &&
-                     PointRectangleBoundWindow.X < rect.Width - (RectangleBoundWindow.StrokeThickness + 3))
-            {
-                if (!IsCursorCapture)
-                {
-                    Cursor = new Cursor(StandardCursorType.BottomSide);
-                }
-            }
-            else if (PointRectangleBoundWindow.X <= RectangleBoundWindow.StrokeThickness &&
-                     PointRectangleBoundWindow.Y >= rect.Height - (RectangleBoundWindow.StrokeThickness +3))
-            {
-                if (!IsCursorCapture)
-                {
-                    Cursor = new Cursor(StandardCursorType.BottomLeftCorner);
-                }
-            }
-        }
-
-        private void TopLevel_OnOpened(object? sender, EventArgs e)
+        private void NewWindowOnOpened(object? sender, EventArgs e)
         {
             RectangleBoundWindow = this.FindControl<Rectangle>("RectangleBound");
         }
-
-        private void RectangleBound_OnPointerLeave(object? sender, PointerEventArgs e)
+        private void NewWindowOnPointerMoved(object? sender, PointerEventArgs e)
         {
-            Cursor = new Cursor(StandardCursorType.Arrow);
-        }
+            if (IsLeftClickRectangleBoundWindow)
+            {
+                double x = PPRectangleBoundClick.Position.X - e.GetCurrentPoint(null).Position.X;
+                
+                if (Width + x > MinWidth && Width + x < MaxWidth)
+                {
+                    PixelPoint pp = new PixelPoint((Position.X - (int)x), (int)RectangleBoundWindowWidth);
+                    Width = Width + x;
+                    Position = pp;
+                }
+            }
+            else if (IsRightClickRectangleBoundWindow)
+            {
+                double x = PointerPointRectangleBoundWindowX - e.GetCurrentPoint(null).Position.X;
+                
+                if (Width - x > MinWidth && Width - x < MaxWidth)
+                {
+                    if(x != Xdiff)
+                        Width = Width - x;
+                    Xdiff = x;
+                    PointerPointRectangleBoundWindowX = e.GetCurrentPoint(null).Position.X;
+                }
+            }
+            else if (IsBottomClickRectangleBoundWindow)
+            {
+                double y = PointerPointRectangleBoundWindowY - e.GetCurrentPoint(null).Position.Y;
+                if (Height - y > MinHeight && Height - y < MaxHeight)
+                {
+                    if(y != Ydiff)
+                        Height = Height - y;
+                    Ydiff = y;
+                    PointerPointRectangleBoundWindowY = e.GetCurrentPoint(null).Position.Y;
+                }
+            }
+            else if (IsBottomLeftClickRectangleBoundWindow)
+            {
+                double y = PointerPointRectangleBoundWindowY - e.GetCurrentPoint(null).Position.Y;
+                double x = PointerPointRectangleBoundWindowX - e.GetCurrentPoint(null).Position.X;
+                
+                if (Width + x > MinWidth && Width + x < MaxWidth)
+                {
+                    PixelPoint pp = new PixelPoint((Position.X - (int)x), (int)RectangleBoundWindowWidth);
+                    Width = Width + x;
+                    Position = pp;
+                }
 
-        private void RectangleBound_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+                if (Height - y > MinHeight && Height - y < MaxHeight)
+                {
+                    if(y != Ydiff)
+                        Height = Height - y;
+                    Ydiff = y;
+                    PointerPointRectangleBoundWindowY = e.GetCurrentPoint(null).Position.Y;
+                }
+            }
+            else if (IsBottomRightClickRectangleBoundWindow)
+            {
+                double x = PointerPointRectangleBoundWindowX - e.GetCurrentPoint(null).Position.X;
+                double y = PointerPointRectangleBoundWindowY - e.GetCurrentPoint(null).Position.Y;
+                if (Width - x > MinWidth && Width - x < MaxWidth)
+                {
+                    if(x != Xdiff)
+                        Width = Width - x;
+                    Xdiff = x;
+                    PointerPointRectangleBoundWindowX = e.GetCurrentPoint(null).Position.X;
+                }
+
+                if (Height - y > MinHeight && Height - y < MaxHeight)
+                {
+                    if(y != Ydiff)
+                        Height = Height - y;
+                    Ydiff = y;
+                    PointerPointRectangleBoundWindowY = e.GetCurrentPoint(null).Position.Y;
+                }
+            }
+        }
+        private void HeaderOnPointerPressed(object? sender, PointerPressedEventArgs e)
+        {
+            PPHeaderClick = e.GetCurrentPoint(null);
+        }
+        private void HeaderOnPointerReleased(object? sender, PointerReleasedEventArgs e)
+        {
+            PPHeaderClick = null;
+        }
+        private void HeaderOnPointerMoved(object? sender, PointerEventArgs e)
+        {
+            if (PPHeaderClick != null)
+            {
+                double x = PPHeaderClick.Position.X - e.GetCurrentPoint(null).Position.X;
+                double y = PPHeaderClick.Position.Y - e.GetCurrentPoint(null).Position.Y;
+                
+                PixelPoint pp = new PixelPoint((Position.X - (int)x), (Position.Y - (int)y));
+
+                Position = pp;
+            }
+        }
+        private void HeaderOnPointerLeave(object? sender, PointerEventArgs e)
+        {
+            PPHeaderClick = null;
+        }
+        private void RectangleBoundOnPointerMoved(object? sender, PointerEventArgs e)
         {
             Rect rect = RectangleBoundWindow.Bounds;
-            PointRectangleBoundWindow = e.GetCurrentPoint(RectangleBoundWindow).Position;
-            PointerPointRectangleBoundWindow = e.GetCurrentPoint(null);
-            PointerPointRectangleBoundWindowX = PointerPointRectangleBoundWindow.Position.X;
-            PointerPointRectangleBoundWindowY = PointerPointRectangleBoundWindow.Position.Y;
+            PRectangleBoundClick = e.GetCurrentPoint(RectangleBoundWindow).Position;
+
+            if (PRectangleBoundClick.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3) && 
+                PRectangleBoundClick.X <= RectangleBoundWindow.StrokeThickness)
+            {
+                if (!IsCursorCapture && !IsCursorLeftSideInit)
+                {
+                    IsCursorLeftSideInit = true;
+                    Cursor = new Cursor(StandardCursorType.LeftSide);
+                }
+            }
+            else if (PRectangleBoundClick.X >= rect.Width - RectangleBoundWindow.StrokeThickness &&
+                     PRectangleBoundClick.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3))
+            {
+                if (!IsCursorCapture && !IsCursorRightSideInit)
+                {
+                    IsCursorRightSideInit = true;
+                    Cursor = new Cursor(StandardCursorType.RightSide);
+                }
+            }
+            else if (PRectangleBoundClick.Y >= rect.Height - RectangleBoundWindow.StrokeThickness && 
+                     PRectangleBoundClick.X > RectangleBoundWindow.StrokeThickness + 3 &&
+                     PRectangleBoundClick.X < rect.Width - (RectangleBoundWindow.StrokeThickness + 3))
+            {
+                if (!IsCursorCapture && !IsCursorBottomSideInit)
+                {
+                    IsCursorBottomSideInit = true;
+                    Cursor = new Cursor(StandardCursorType.BottomSide);
+                }
+            }
+            else if (PRectangleBoundClick.X <= RectangleBoundWindow.StrokeThickness &&
+                     PRectangleBoundClick.Y >= rect.Height - (RectangleBoundWindow.StrokeThickness +3))
+            {
+                if (!IsCursorCapture && !IsCursorBottomLeftInit)
+                {
+                    IsCursorBottomLeftInit = true;
+                    Cursor = new Cursor(StandardCursorType.BottomLeftCorner);
+                }
+            }
+            else if (PRectangleBoundClick.X >= rect.Width - (RectangleBoundWindow.StrokeThickness +3) &&
+                     PRectangleBoundClick.Y >= rect.Height - (RectangleBoundWindow.StrokeThickness +3))
+            {
+                if (!IsCursorCapture && !IsCursorBottomRightInit)
+                {
+                    IsCursorBottomRightInit = true;
+                    Cursor = new Cursor(StandardCursorType.BottomRightCorner);
+                }
+            }
+        }
+        private void RectangleBoundOnPointerLeave(object? sender, PointerEventArgs e)
+        {
+            Cursor = new Cursor(StandardCursorType.Arrow);
+            IsCursorCapture = false;
+        }
+        private void RectangleBoundOnPointerPressed(object? sender, PointerPressedEventArgs e)
+        {
+            Rect rect = RectangleBoundWindow.Bounds;
+            PPRectangleBoundClick = e.GetCurrentPoint(null);
+            PRectangleBoundClick = PPRectangleBoundClick.Position;
+            PointerPointRectangleBoundWindowX = PPRectangleBoundClick.Position.X;
+            PointerPointRectangleBoundWindowY = PPRectangleBoundClick.Position.Y;
             RectangleBoundWindowWidth = Position.Y;
             
-            if (PointRectangleBoundWindow.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3) && 
-                PointRectangleBoundWindow.X <= RectangleBoundWindow.StrokeThickness)
+            if (PRectangleBoundClick.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3) && 
+                PRectangleBoundClick.X <= RectangleBoundWindow.StrokeThickness)
             {
                 IsCursorCapture = true;
                 IsLeftClickRectangleBoundWindow = true;
             }
-            else if (PointRectangleBoundWindow.X >= rect.Width - RectangleBoundWindow.StrokeThickness &&
-                     PointRectangleBoundWindow.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3))
+            else if (PRectangleBoundClick.X >= rect.Width - RectangleBoundWindow.StrokeThickness &&
+                     PRectangleBoundClick.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3))
             {
                 IsCursorCapture = true;
                 IsRightClickRectangleBoundWindow = true;
             }
-            else if (PointRectangleBoundWindow.Y >= rect.Height - RectangleBoundWindow.StrokeThickness && 
-                     PointRectangleBoundWindow.X > RectangleBoundWindow.StrokeThickness + 3 &&
-                     PointRectangleBoundWindow.X < rect.Width - (RectangleBoundWindow.StrokeThickness + 3))
+            else if (PRectangleBoundClick.Y >= rect.Height - RectangleBoundWindow.StrokeThickness && 
+                     PRectangleBoundClick.X > RectangleBoundWindow.StrokeThickness + 3 &&
+                     PRectangleBoundClick.X < rect.Width - (RectangleBoundWindow.StrokeThickness + 3))
             {
                 IsCursorCapture = true;
                 IsBottomClickRectangleBoundWindow = true;
             }
-            else if (PointRectangleBoundWindow.X <= RectangleBoundWindow.StrokeThickness &&
-                     PointRectangleBoundWindow.Y >= rect.Height - (RectangleBoundWindow.StrokeThickness +3))
+            else if (PRectangleBoundClick.X <= RectangleBoundWindow.StrokeThickness &&
+                     PRectangleBoundClick.Y >= rect.Height - (RectangleBoundWindow.StrokeThickness +3))
             {
                 IsCursorCapture = true;
                 IsBottomLeftClickRectangleBoundWindow = true;
             }
+            else if (PRectangleBoundClick.X >= rect.Width - (RectangleBoundWindow.StrokeThickness +3) &&
+                     PRectangleBoundClick.Y >= rect.Height - (RectangleBoundWindow.StrokeThickness +3))
+            {
+                IsCursorCapture = true;
+                IsBottomRightClickRectangleBoundWindow = true;
+            }
         }
-
-        private void RectangleBound_OnPointerReleased(object? sender, PointerReleasedEventArgs e)
+        private void RectangleBoundOnPointerReleased(object? sender, PointerReleasedEventArgs e)
         {
             IsLeftClickRectangleBoundWindow = false;
             IsRightClickRectangleBoundWindow = false;
             IsBottomClickRectangleBoundWindow = false;
             IsBottomLeftClickRectangleBoundWindow = false;
+            IsBottomRightClickRectangleBoundWindow = false;
             IsCursorCapture = false;
         }
-
-        private void NewWindow_OnPointerMoved(object? sender, PointerEventArgs e)
+        private void BExitOnClick(object? sender, RoutedEventArgs e)
         {
-            if (IsLeftClickRectangleBoundWindow)
-            {
-                double x = PointerPointRectangleBoundWindow.Position.X - e.GetCurrentPoint(null).Position.X;
-
-                PixelPoint pp = new PixelPoint((Position.X - (int)x), (int)RectangleBoundWindowWidth);
-                Width = Width + x;
-
-                Position = pp;
-            }
-            else if (IsRightClickRectangleBoundWindow)
-            {
-                double x = PointerPointRectangleBoundWindowX - e.GetCurrentPoint(null).Position.X;
-                if(x != xdiff)
-                    Width = Width - x;
-                xdiff = x;
-                PointerPointRectangleBoundWindowX = e.GetCurrentPoint(null).Position.X;
-            }
-            else if (IsBottomClickRectangleBoundWindow)
-            {
-                double y = PointerPointRectangleBoundWindowY - e.GetCurrentPoint(null).Position.Y;
-                if(y != ydiff)
-                    Height = Height - y;
-                ydiff = y;
-                PointerPointRectangleBoundWindowY = e.GetCurrentPoint(null).Position.Y;
-            }
-            else if (IsBottomLeftClickRectangleBoundWindow)
-            {
-                double y = PointerPointRectangleBoundWindowY - e.GetCurrentPoint(null).Position.Y;
-                if(y != ydiff)
-                    Height = Height - y;
-                ydiff = y;
-                PointerPointRectangleBoundWindowY = e.GetCurrentPoint(null).Position.Y;
-            }
+            Close();
         }
     }
 }
