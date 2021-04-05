@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" 
         x:Class="PrimSCADA.NewWindow"
-        Width="1024" Height="800" MinHeight="200" MaxHeight="850" MinWidth="200" MaxWidth="1100"
+        Width="1024" Height="800" MinHeight="200" MinWidth="200"
         Title="PrimSCADA" ShowInTaskbar="False" SystemDecorations="BorderOnly" Initialized="NewWindowOnInitialized" CanResize="True" Opened="NewWindowOnOpened" PointerMoved="NewWindowOnPointerMoved">
     <Grid RowDefinitions="30, *">
         <Rectangle Name="Header" Fill="Blue" PointerPressed="HeaderOnPointerPressed" PointerReleased="HeaderOnPointerReleased" PointerMoved="HeaderOnPointerMoved" PointerLeave="HeaderOnPointerLeave"></Rectangle>
