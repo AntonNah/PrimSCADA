@@ -6,12 +6,15 @@
         x:Class="PrimSCADA.NewWindow"
         Width="1024" Height="800" MinHeight="200" MinWidth="200"
         Title="PrimSCADA" ShowInTaskbar="False" SystemDecorations="BorderOnly" Initialized="NewWindowOnInitialized" CanResize="True" Opened="NewWindowOnOpened" PointerMoved="NewWindowOnPointerMoved">
-    <Grid RowDefinitions="30, *">
-        <Rectangle Name="Header" Fill="Blue" PointerPressed="HeaderOnPointerPressed" PointerReleased="HeaderOnPointerReleased" PointerMoved="HeaderOnPointerMoved" PointerLeave="HeaderOnPointerLeave"></Rectangle>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+    <Grid RowDefinitions="30, *" ColumnDefinitions="200, Auto, *">
+        <GridSplitter Grid.RowSpan="2" Grid.Column="1"></GridSplitter>
+        <Rectangle Grid.ColumnSpan="3" Name="Header" Fill="White" PointerPressed="HeaderOnPointerPressed" PointerReleased="HeaderOnPointerReleased" PointerMoved="HeaderOnPointerMoved" PointerLeave="HeaderOnPointerLeave"></Rectangle>
+        <Label>New solution</Label>
+        <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Name="BExit" Background="Red" Click="BExitOnClick">X</Button>
         </StackPanel>
-        <Rectangle Name="RectangleBound" Grid.Row="1" StrokeThickness="2" Stroke="Black" PointerMoved="RectangleBoundOnPointerMoved" PointerLeave="RectangleBoundOnPointerLeave" PointerPressed="RectangleBoundOnPointerPressed" PointerReleased="RectangleBoundOnPointerReleased"></Rectangle>
+        <ListBox Grid.Row="1"></ListBox>
+        <Rectangle Grid.ColumnSpan="3" Name="RectangleBound" Grid.Row="1" StrokeThickness="2" Stroke="#ede9e8" PointerMoved="RectangleBoundOnPointerMoved" PointerLeave="RectangleBoundOnPointerLeave" PointerPressed="RectangleBoundOnPointerPressed" PointerReleased="RectangleBoundOnPointerReleased"></Rectangle>
     </Grid>
 </Window>
         

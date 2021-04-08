@@ -23,11 +23,6 @@ namespace PrimSCADA
         private bool IsBottomLeftClickRectangleBoundWindow;
         private bool IsBottomRightClickRectangleBoundWindow;
         private bool IsCursorCapture;
-        private bool IsCursorRightSideInit;
-        private bool IsCursorLeftSideInit;
-        private bool IsCursorBottomSideInit;
-        private bool IsCursorBottomLeftInit;
-        private bool IsCursorBottomRightInit;
         private double Xdiff;
         private double Ydiff;
         private double PointerPointRectangleBoundWindowX;
@@ -153,18 +148,16 @@ namespace PrimSCADA
             if (PRectangleBoundClick.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3) && 
                 PRectangleBoundClick.X <= RectangleBoundWindow.StrokeThickness)
             {
-                if (!IsCursorCapture && !IsCursorLeftSideInit)
+                if (!IsCursorCapture)
                 {
-                    IsCursorLeftSideInit = true;
                     Cursor = new Cursor(StandardCursorType.LeftSide);
                 }
             }
             else if (PRectangleBoundClick.X >= rect.Width - RectangleBoundWindow.StrokeThickness &&
                      PRectangleBoundClick.Y < rect.Height - (RectangleBoundWindow.StrokeThickness + 3))
             {
-                if (!IsCursorCapture && !IsCursorRightSideInit)
+                if (!IsCursorCapture)
                 {
-                    IsCursorRightSideInit = true;
                     Cursor = new Cursor(StandardCursorType.RightSide);
                 }
             }
@@ -172,27 +165,24 @@ namespace PrimSCADA
                      PRectangleBoundClick.X > RectangleBoundWindow.StrokeThickness + 3 &&
                      PRectangleBoundClick.X < rect.Width - (RectangleBoundWindow.StrokeThickness + 3))
             {
-                if (!IsCursorCapture && !IsCursorBottomSideInit)
+                if (!IsCursorCapture)
                 {
-                    IsCursorBottomSideInit = true;
                     Cursor = new Cursor(StandardCursorType.BottomSide);
                 }
             }
             else if (PRectangleBoundClick.X <= RectangleBoundWindow.StrokeThickness &&
                      PRectangleBoundClick.Y >= rect.Height - (RectangleBoundWindow.StrokeThickness +3))
             {
-                if (!IsCursorCapture && !IsCursorBottomLeftInit)
+                if (!IsCursorCapture)
                 {
-                    IsCursorBottomLeftInit = true;
                     Cursor = new Cursor(StandardCursorType.BottomLeftCorner);
                 }
             }
             else if (PRectangleBoundClick.X >= rect.Width - (RectangleBoundWindow.StrokeThickness +3) &&
                      PRectangleBoundClick.Y >= rect.Height - (RectangleBoundWindow.StrokeThickness +3))
             {
-                if (!IsCursorCapture && !IsCursorBottomRightInit)
+                if (!IsCursorCapture)
                 {
-                    IsCursorBottomRightInit = true;
                     Cursor = new Cursor(StandardCursorType.BottomRightCorner);
                 }
             }
