@@ -6,10 +6,12 @@
         x:Class="PrimSCADA.NewWindow"
         Width="1024" Height="800" MinHeight="200" MinWidth="200"
         Title="PrimSCADA" ShowInTaskbar="False" SystemDecorations="BorderOnly" Initialized="NewWindowOnInitialized" CanResize="True" Opened="NewWindowOnOpened" PointerMoved="NewWindowOnPointerMoved">
-    <Grid RowDefinitions="30, *" ColumnDefinitions="200, Auto, *">
+    <Grid Name="GridMain" RowDefinitions="30, *" ColumnDefinitions="200, Auto, *">
         <GridSplitter Grid.RowSpan="2" Grid.Column="1"></GridSplitter>
-        <Rectangle Grid.ColumnSpan="3" Name="Header" Fill="White" PointerPressed="HeaderOnPointerPressed" PointerReleased="HeaderOnPointerReleased" PointerMoved="HeaderOnPointerMoved" PointerLeave="HeaderOnPointerLeave"></Rectangle>
-        <Label>New solution</Label>
+        <Grid Grid.ColumnSpan="3" PointerPressed="HeaderOnPointerPressed" PointerReleased="HeaderOnPointerReleased" PointerMoved="HeaderOnPointerMoved" PointerLeave="HeaderOnPointerLeave">
+            <Rectangle  Name="Header" Fill="White"></Rectangle>
+            <Label>New solution</Label>
+        </Grid>
         <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Name="BExit" Background="Red" Click="BExitOnClick">X</Button>
         </StackPanel>

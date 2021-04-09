@@ -13,6 +13,7 @@ namespace PrimSCADA
     public class NewWindow : Window
     {
         private Rectangle RectangleBoundWindow;
+        private Grid GridMain;
         private PointerPoint? PPHeaderClick;
         private PointerPoint PPRectangleBoundClick;
         private Point PRectangleBoundClick;
@@ -38,6 +39,10 @@ namespace PrimSCADA
         private void NewWindowOnOpened(object? sender, EventArgs e)
         {
             RectangleBoundWindow = this.FindControl<Rectangle>("RectangleBound");
+            GridMain = this.FindControl<Grid>("GridMain");
+            
+            ColumnDefinition column2 =  GridMain.ColumnDefinitions[0];
+            column2.MinWidth = 200;
         }
         private void NewWindowOnPointerMoved(object? sender, PointerEventArgs e)
         {
