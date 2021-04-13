@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Drawing;
+using System.Collections;
+using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Avalonia.Media;
 using Point = Avalonia.Point;
 using Rectangle = Avalonia.Controls.Shapes.Rectangle;
 
@@ -14,6 +16,7 @@ namespace PrimSCADA
     {
         private Rectangle RectangleBoundWindow;
         private Grid GridMain;
+        private ListBox LBSolution;
         private PointerPoint? PPHeaderClick;
         private PointerPoint PPRectangleBoundClick;
         private Point PRectangleBoundClick;
@@ -28,9 +31,12 @@ namespace PrimSCADA
         private double Ydiff;
         private double PointerPointRectangleBoundWindowX;
         private double PointerPointRectangleBoundWindowY;
-        
+        private List<string> CollectionLBSolution;
+
         private void NewWindowOnInitialized(object? sender, EventArgs e)
         {
+            CollectionLBSolution = new List<string>();
+
             Screens screens = new Window().Screens;
             PixelRect pr = screens.Primary.Bounds;
             PixelPoint pp = new PixelPoint(pr.BottomRight.X / 5, pr.BottomRight.Y / 5) ;
@@ -38,11 +44,21 @@ namespace PrimSCADA
         }
         private void NewWindowOnOpened(object? sender, EventArgs e)
         {
+            CollectionLBSolution.Add("Empty solution");
+            
             RectangleBoundWindow = this.FindControl<Rectangle>("RectangleBound");
             GridMain = this.FindControl<Grid>("GridMain");
+            LBSolution = this.FindControl<ListBox>("LBSolution");
             
             ColumnDefinition column2 =  GridMain.ColumnDefinitions[0];
+            column2.MaxWidth = 500;
             column2.MinWidth = 200;
+            
+            Binding bLBSolution = new Binding();
+            bLBSolution.Source = CollectionLBSolution;
+            
+            LBSolution.Bind(ListBox.ItemsProperty, bLBSolution);
+            LBSolution.SelectedIndex = 0;
         }
         private void NewWindowOnPointerMoved(object? sender, PointerEventArgs e)
         {
@@ -250,6 +266,22 @@ namespace PrimSCADA
         private void BExitOnClick(object? sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void LBSolutionOnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            IList list = e.AddedItems;
+
+            if (list[0] == "Empty solution")
+            {
+                Label label = new Label();
+                label.FontStyle = FontStyle.Italic;
+                label.Content = "Empty solution";
+                Grid.SetColumn(label, 2);
+                Grid.SetRow(label, 1);
+                
+                GridMain.Children.Add(label);
+            }
         }
     }
 }

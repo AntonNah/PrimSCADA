@@ -15,8 +15,7 @@
         <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Name="BExit" Background="Red" Click="BExitOnClick">X</Button>
         </StackPanel>
-        <ListBox Grid.Row="1"></ListBox>
+        <ListBox Name="LBSolution" Grid.Row="1" SelectionChanged="LBSolutionOnSelectionChanged"></ListBox>
         <Rectangle Grid.ColumnSpan="3" Name="RectangleBound" Grid.Row="1" StrokeThickness="2" Stroke="#ede9e8" PointerMoved="RectangleBoundOnPointerMoved" PointerLeave="RectangleBoundOnPointerLeave" PointerPressed="RectangleBoundOnPointerPressed" PointerReleased="RectangleBoundOnPointerReleased"></Rectangle>
     </Grid>
 </Window>
-        
