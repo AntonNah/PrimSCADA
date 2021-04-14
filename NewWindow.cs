@@ -274,13 +274,23 @@ namespace PrimSCADA
 
             if (list[0] == "Empty solution")
             {
+                Grid gridEmptySolution = new Grid();
+                Grid.SetColumn(gridEmptySolution, 2);
+                Grid.SetRow(gridEmptySolution, 1);
+                GridMain.Children.Add(gridEmptySolution);
+
+                RowDefinition rw = new RowDefinition();
+                RowDefinition rw2 = new RowDefinition();
+                RowDefinition rw3 = new RowDefinition();
+                
+                gridEmptySolution.RowDefinitions.Add(rw);
+                gridEmptySolution.RowDefinitions.Add(rw2);
+                gridEmptySolution.RowDefinitions.Add(rw3);
+                
                 Label label = new Label();
                 label.FontStyle = FontStyle.Italic;
                 label.Content = "Empty solution";
-                Grid.SetColumn(label, 2);
-                Grid.SetRow(label, 1);
-                
-                GridMain.Children.Add(label);
+                gridEmptySolution.Children.Add(label);
             }
         }
     }
