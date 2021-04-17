@@ -279,18 +279,52 @@ namespace PrimSCADA
                 Grid.SetRow(gridEmptySolution, 1);
                 GridMain.Children.Add(gridEmptySolution);
 
-                RowDefinition rw = new RowDefinition();
-                RowDefinition rw2 = new RowDefinition();
-                RowDefinition rw3 = new RowDefinition();
+                RowDefinition rw = new RowDefinition(GridLength.Auto);
+                RowDefinition rw2 = new RowDefinition(GridLength.Auto);
+                RowDefinition rw3 = new RowDefinition(GridLength.Auto);
+                RowDefinition rw4 = new RowDefinition(GridLength.Auto);
+
+                ColumnDefinition cm = new ColumnDefinition(GridLength.Auto);
+                ColumnDefinition cm2 = new ColumnDefinition(GridLength.Auto);
                 
                 gridEmptySolution.RowDefinitions.Add(rw);
                 gridEmptySolution.RowDefinitions.Add(rw2);
                 gridEmptySolution.RowDefinitions.Add(rw3);
+                gridEmptySolution.RowDefinitions.Add(rw4);
+                gridEmptySolution.ColumnDefinitions.Add(cm);
+                gridEmptySolution.ColumnDefinitions.Add(cm2);
                 
-                Label label = new Label();
-                label.FontStyle = FontStyle.Italic;
-                label.Content = "Empty solution";
-                gridEmptySolution.Children.Add(label);
+                Label labelCaption = new Label();
+                labelCaption.FontStyle = FontStyle.Italic;
+                labelCaption.Content = "Empty solution";
+
+                Label labelSolutionName = new Label();
+                labelSolutionName.Content = "Solution name:";
+                Grid.SetRow(labelSolutionName, 1);
+
+                Label labelSolutionDirectory = new Label();
+                labelSolutionDirectory.Content = "Solution directory:";
+                Grid.SetRow(labelSolutionDirectory, 2);
+
+                TextBox tbSolutionName = new TextBox();
+                Grid.SetRow(tbSolutionName, 1);
+                Grid.SetColumn(tbSolutionName, 1);
+
+                TextBox tbSolutionDirectory = new TextBox();
+                Grid.SetRow(tbSolutionDirectory, 2);
+                Grid.SetColumn(tbSolutionDirectory, 1);
+
+                CheckBox chbCreateDirectory = new CheckBox();
+                chbCreateDirectory.Content = "Create directory for the solution";
+                Grid.SetRow(chbCreateDirectory, 3);
+                Grid.SetColumn(chbCreateDirectory, 1);
+                
+                gridEmptySolution.Children.Add(labelCaption);
+                gridEmptySolution.Children.Add(labelSolutionName);
+                gridEmptySolution.Children.Add(tbSolutionName);
+                gridEmptySolution.Children.Add(labelSolutionDirectory);
+                gridEmptySolution.Children.Add(tbSolutionDirectory);
+                gridEmptySolution.Children.Add(chbCreateDirectory);
             }
         }
     }
