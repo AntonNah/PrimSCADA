@@ -8,6 +8,9 @@
         <PackageReference Include="Avalonia" Version="0.10.0" />
         <PackageReference Include="Avalonia.Desktop" Version="0.10.0" />
         <PackageReference Include="Avalonia.Diagnostics" Version="0.10.0" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.0" />
+        <PackageReference Include="protobuf-net" Version="3.0.101" />
+        <PackageReference Include="ScottPlot.Avalonia" Version="4.1.12-beta" />
     </ItemGroup>
     <ItemGroup>
       <Compile Update="NewWindow.acs">

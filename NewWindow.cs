@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Threading;
 using Point = Avalonia.Point;
 using Rectangle = Avalonia.Controls.Shapes.Rectangle;
 
@@ -17,6 +20,8 @@ namespace PrimSCADA
         private Rectangle RectangleBoundWindow;
         private Grid GridMain;
         private ListBox LBSolution;
+        private TextBox TBSolutionName;
+        private string ValidSolutionName;
         private PointerPoint? PPHeaderClick;
         private PointerPoint PPRectangleBoundClick;
         private Point PRectangleBoundClick;
@@ -36,6 +41,8 @@ namespace PrimSCADA
         private void NewWindowOnInitialized(object? sender, EventArgs e)
         {
             CollectionLBSolution = new List<string>();
+            
+            TBSolutionName = new TextBox();
 
             Screens screens = new Window().Screens;
             PixelRect pr = screens.Primary.Bounds;
@@ -283,6 +290,7 @@ namespace PrimSCADA
                 RowDefinition rw2 = new RowDefinition(GridLength.Auto);
                 RowDefinition rw3 = new RowDefinition(GridLength.Auto);
                 RowDefinition rw4 = new RowDefinition(GridLength.Auto);
+                RowDefinition rw5 = new RowDefinition(GridLength.Auto);
 
                 ColumnDefinition cm = new ColumnDefinition(GridLength.Auto);
                 ColumnDefinition cm2 = new ColumnDefinition(GridLength.Auto);
@@ -291,6 +299,7 @@ namespace PrimSCADA
                 gridEmptySolution.RowDefinitions.Add(rw2);
                 gridEmptySolution.RowDefinitions.Add(rw3);
                 gridEmptySolution.RowDefinitions.Add(rw4);
+                gridEmptySolution.RowDefinitions.Add(rw5);
                 gridEmptySolution.ColumnDefinitions.Add(cm);
                 gridEmptySolution.ColumnDefinitions.Add(cm2);
                 
@@ -305,12 +314,13 @@ namespace PrimSCADA
                 Label labelSolutionDirectory = new Label();
                 labelSolutionDirectory.Content = "Solution directory:";
                 Grid.SetRow(labelSolutionDirectory, 2);
-
-                TextBox tbSolutionName = new TextBox();
-                Grid.SetRow(tbSolutionName, 1);
-                Grid.SetColumn(tbSolutionName, 1);
+                
+                TBSolutionName.GetObservable(TextBox.TextProperty).Subscribe(OnNext);
+                Grid.SetRow(TBSolutionName, 1);
+                Grid.SetColumn(TBSolutionName, 1);
 
                 TextBox tbSolutionDirectory = new TextBox();
+                tbSolutionDirectory.Text = ((App) Application.Current).Settings.DirectoryPath;
                 Grid.SetRow(tbSolutionDirectory, 2);
                 Grid.SetColumn(tbSolutionDirectory, 1);
 
@@ -318,14 +328,58 @@ namespace PrimSCADA
                 chbCreateDirectory.Content = "Create directory for the solution";
                 Grid.SetRow(chbCreateDirectory, 3);
                 Grid.SetColumn(chbCreateDirectory, 1);
+
+                DockPanel dPanel = new DockPanel();
                 
+                Button bCreate = new Button();
+                bCreate.Content = "Create";
+                bCreate.Click += BCreateOnClick;
+
+                Button bCancel = new Button();
+                bCancel.Content = "Cancel";
+                bCancel.Click += BCancelOnClick;
+                
+                StackPanel sPanel = new StackPanel();
+                Grid.SetRow(sPanel, 4);
+                Grid.SetColumnSpan(sPanel, 2);
+                sPanel.Orientation = Orientation.Horizontal;
+                sPanel.HorizontalAlignment = HorizontalAlignment.Right;
+                sPanel.Children.Add(bCreate);
+                sPanel.Children.Add(bCancel);
+
                 gridEmptySolution.Children.Add(labelCaption);
                 gridEmptySolution.Children.Add(labelSolutionName);
-                gridEmptySolution.Children.Add(tbSolutionName);
+                gridEmptySolution.Children.Add(TBSolutionName);
                 gridEmptySolution.Children.Add(labelSolutionDirectory);
                 gridEmptySolution.Children.Add(tbSolutionDirectory);
                 gridEmptySolution.Children.Add(chbCreateDirectory);
+                gridEmptySolution.Children.Add(sPanel);
             }
+        }
+
+        private void OnNext(string s)
+        {
+            if (s != null)
+            {
+                if (s.Length > 10)
+                {
+                    Dispatcher.UIThread.InvokeAsync(() => TBSolutionName.Text = ValidSolutionName);
+                }
+                else
+                {
+                    ValidSolutionName = s;
+                }
+            }
+        }
+
+        private void BCancelOnClick(object? sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void BCreateOnClick(object? sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
