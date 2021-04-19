@@ -21,6 +21,7 @@ namespace PrimSCADA
         private Grid GridMain;
         private ListBox LBSolution;
         private TextBox TBSolutionName;
+        private ToolTip TTSolutionName;
         private string ValidSolutionName;
         private PointerPoint? PPHeaderClick;
         private PointerPoint PPRectangleBoundClick;
@@ -41,8 +42,12 @@ namespace PrimSCADA
         private void NewWindowOnInitialized(object? sender, EventArgs e)
         {
             CollectionLBSolution = new List<string>();
-            
+            Label l = new Label();
+            l.Content = "dqfqf";
             TBSolutionName = new TextBox();
+            ToolTip.SetTip(TBSolutionName, l);
+            TTSolutionName = new ToolTip();
+            TTSolutionName.
 
             Screens screens = new Window().Screens;
             PixelRect pr = screens.Primary.Bounds;
@@ -361,9 +366,10 @@ namespace PrimSCADA
         {
             if (s != null)
             {
-                if (s.Length > 10)
+                if (s.Length > 50)
                 {
                     Dispatcher.UIThread.InvokeAsync(() => TBSolutionName.Text = ValidSolutionName);
+                    TTSolutionName.IsOpen = 
                 }
                 else
                 {
