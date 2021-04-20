@@ -33,14 +33,14 @@ namespace PrimSCADA
         public double PointerPointRectangleBoundWindowX;
         public double PointerPointRectangleBoundWindowY;
 
-        private void NewWindowOnInitialized(object? sender, EventArgs e)
+        public void NewWindowOnInitialized(object? sender, EventArgs e)
         {
             Screens screens = new Window().Screens;
             PixelRect pr = screens.Primary.Bounds;
             PixelPoint pp = new PixelPoint(pr.BottomRight.X / 5, pr.BottomRight.Y / 5) ;
             Position = pp;
         }
-        private void NewWindowOnOpened(object? sender, EventArgs e)
+        public void NewWindowOnOpened(object? sender, EventArgs e)
         {
             RectangleBoundWindow = this.FindControl<Rectangle>("RectangleBound");
             GridMain = this.FindControl<Grid>("GridMain");

@@ -27,13 +27,7 @@ namespace PrimSCADA
         private void NewWindowOnInitialized(object? sender, EventArgs e)
         {
             CollectionLBSolution = new List<string>();
-            
             TBSolutionName = new TextBox();
-
-            Screens screens = new Window().Screens;
-            PixelRect pr = screens.Primary.Bounds;
-            PixelPoint pp = new PixelPoint(pr.BottomRight.X / 5, pr.BottomRight.Y / 5) ;
-            Position = pp;
         }
         private void NewWindowOnOpened(object? sender, EventArgs e)
         {
