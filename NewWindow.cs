@@ -23,23 +23,19 @@ namespace PrimSCADA
         private bool IsShowToolTip;
         private string ValidSolutionName;
         private List<string> CollectionLBSolution;
-
-        private void NewWindowOnInitialized(object? sender, EventArgs e)
+        
+        private new void NewWindowOnOpened(object? sender, EventArgs e)
         {
+            base.NewWindowOnOpened(sender, e);
+            
             CollectionLBSolution = new List<string>();
             TBSolutionName = new TextBox();
-        }
-        private void NewWindowOnOpened(object? sender, EventArgs e)
-        {
+            
             CollectionLBSolution.Add("Empty solution");
             
             GridMain = this.FindControl<Grid>("GridMain");
             LBSolution = this.FindControl<ListBox>("LBSolution");
-            
-            ColumnDefinition column2 =  GridMain.ColumnDefinitions[0];
-            column2.MaxWidth = 500;
-            column2.MinWidth = 200;
-            
+
             Binding bLBSolution = new Binding();
             bLBSolution.Source = CollectionLBSolution;
             
@@ -161,6 +157,47 @@ namespace PrimSCADA
         private void BCreateOnClick(object? sender, RoutedEventArgs e)
         {
             Close();
+        }
+        
+        public new void NewWindowOnPointerMoved(object? sender, PointerEventArgs e)
+        {
+            base.NewWindowOnPointerMoved(sender, e);
+        }
+        public new void HeaderOnPointerPressed(object? sender, PointerPressedEventArgs e)
+        {
+            base.HeaderOnPointerPressed(sender, e);
+        }
+        public new void HeaderOnPointerReleased(object? sender, PointerReleasedEventArgs e)
+        {
+            base.HeaderOnPointerReleased(sender, e);
+        }
+        public new void HeaderOnPointerMoved(object? sender, PointerEventArgs e)
+        {
+            base.HeaderOnPointerMoved(sender, e);
+        }
+        public new void HeaderOnPointerLeave(object? sender, PointerEventArgs e)
+        {
+            base.HeaderOnPointerLeave(sender, e);
+        }
+        public new void RectangleBoundOnPointerMoved(object? sender, PointerEventArgs e)
+        {
+            base.RectangleBoundOnPointerMoved(sender, e);
+        }
+        public new void RectangleBoundOnPointerLeave(object? sender, PointerEventArgs e)
+        {
+            base.RectangleBoundOnPointerLeave(sender, e);
+        }
+        public new void RectangleBoundOnPointerPressed(object? sender, PointerPressedEventArgs e)
+        {
+            base.RectangleBoundOnPointerPressed(sender, e);
+        }
+        public new  void RectangleBoundOnPointerReleased(object? sender, PointerReleasedEventArgs e)
+        {
+            base.RectangleBoundOnPointerReleased(sender, e);
+        }
+        public new void BExitOnClick(object? sender, RoutedEventArgs e)
+        {
+            base.BExitOnClick(sender, e);
         }
     }
 }

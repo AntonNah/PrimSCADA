@@ -5,16 +5,16 @@
         mc:Ignorable="d" 
         x:Class="PrimSCADA.CustomWindow"
         Width="1024" Height="800" MinHeight="200" MinWidth="200"
-        ShowInTaskbar="False" SystemDecorations="BorderOnly" CanResize="True" Opened="NewWindowOnOpened" PointerMoved="NewWindowOnPointerMoved">
+        ShowInTaskbar="False" SystemDecorations="BorderOnly" CanResize="True">
     <Grid Name="GridMain" RowDefinitions="30, *" ColumnDefinitions="200, Auto, *">
         <GridSplitter Grid.RowSpan="2" Grid.Column="1"></GridSplitter>
-        <Grid Grid.ColumnSpan="3" PointerPressed="HeaderOnPointerPressed" PointerReleased="HeaderOnPointerReleased" PointerMoved="HeaderOnPointerMoved" PointerLeave="HeaderOnPointerLeave">
+        <Grid Grid.ColumnSpan="3">
             <Rectangle  Name="Header" Fill="White"></Rectangle>
             <Label>New solution</Label>
         </Grid>
         <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Name="BExit" Background="Red" Click="BExitOnClick">X</Button>
+            <Button Name="BExit" Background="Red">X</Button>
         </StackPanel>
-        <Rectangle Grid.ColumnSpan="3" Name="RectangleBound" Grid.Row="1" StrokeThickness="2" Stroke="#ede9e8" PointerMoved="RectangleBoundOnPointerMoved" PointerLeave="RectangleBoundOnPointerLeave" PointerPressed="RectangleBoundOnPointerPressed" PointerReleased="RectangleBoundOnPointerReleased"></Rectangle>
+        <Rectangle Grid.ColumnSpan="3" Name="RectangleBound" Grid.Row="1" StrokeThickness="2" Stroke="#ede9e8"></Rectangle>
     </Grid>
 </Window>

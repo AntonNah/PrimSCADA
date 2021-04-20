@@ -32,16 +32,14 @@ namespace PrimSCADA
         public double Ydiff;
         public double PointerPointRectangleBoundWindowX;
         public double PointerPointRectangleBoundWindowY;
-
-        public void NewWindowOnInitialized(object? sender, EventArgs e)
+        
+        protected void NewWindowOnOpened(object? sender, EventArgs e)
         {
             Screens screens = new Window().Screens;
             PixelRect pr = screens.Primary.Bounds;
             PixelPoint pp = new PixelPoint(pr.BottomRight.X / 5, pr.BottomRight.Y / 5) ;
             Position = pp;
-        }
-        public void NewWindowOnOpened(object? sender, EventArgs e)
-        {
+            
             RectangleBoundWindow = this.FindControl<Rectangle>("RectangleBound");
             GridMain = this.FindControl<Grid>("GridMain");
 
@@ -49,7 +47,7 @@ namespace PrimSCADA
             column2.MaxWidth = 500;
             column2.MinWidth = 200;
         }
-        public void NewWindowOnPointerMoved(object? sender, PointerEventArgs e)
+        protected void NewWindowOnPointerMoved(object? sender, PointerEventArgs e)
         {
             if (IsLeftClickRectangleBoundWindow)
             {
@@ -126,15 +124,15 @@ namespace PrimSCADA
                 }
             }
         }
-        public void HeaderOnPointerPressed(object? sender, PointerPressedEventArgs e)
+        protected void HeaderOnPointerPressed(object? sender, PointerPressedEventArgs e)
         {
             PPHeaderClick = e.GetCurrentPoint(null);
         }
-        public void HeaderOnPointerReleased(object? sender, PointerReleasedEventArgs e)
+        protected void HeaderOnPointerReleased(object? sender, PointerReleasedEventArgs e)
         {
             PPHeaderClick = null;
         }
-        public void HeaderOnPointerMoved(object? sender, PointerEventArgs e)
+        protected void HeaderOnPointerMoved(object? sender, PointerEventArgs e)
         {
             if (PPHeaderClick != null)
             {
@@ -146,11 +144,11 @@ namespace PrimSCADA
                 Position = pp;
             }
         }
-        public void HeaderOnPointerLeave(object? sender, PointerEventArgs e)
+        protected void HeaderOnPointerLeave(object? sender, PointerEventArgs e)
         {
             PPHeaderClick = null;
         }
-        public void RectangleBoundOnPointerMoved(object? sender, PointerEventArgs e)
+        protected void RectangleBoundOnPointerMoved(object? sender, PointerEventArgs e)
         {
             Rect rect = RectangleBoundWindow.Bounds;
             PRectangleBoundClick = e.GetCurrentPoint(RectangleBoundWindow).Position;
@@ -197,12 +195,12 @@ namespace PrimSCADA
                 }
             }
         }
-        public void RectangleBoundOnPointerLeave(object? sender, PointerEventArgs e)
+        protected void RectangleBoundOnPointerLeave(object? sender, PointerEventArgs e)
         {
             Cursor = new Cursor(StandardCursorType.Arrow);
             IsCursorCapture = false;
         }
-        public void RectangleBoundOnPointerPressed(object? sender, PointerPressedEventArgs e)
+        protected void RectangleBoundOnPointerPressed(object? sender, PointerPressedEventArgs e)
         {
             Rect rect = RectangleBoundWindow.Bounds;
             PPRectangleBoundClick = e.GetCurrentPoint(null);
@@ -243,7 +241,7 @@ namespace PrimSCADA
                 IsBottomRightClickRectangleBoundWindow = true;
             }
         }
-        public void RectangleBoundOnPointerReleased(object? sender, PointerReleasedEventArgs e)
+        protected void RectangleBoundOnPointerReleased(object? sender, PointerReleasedEventArgs e)
         {
             IsLeftClickRectangleBoundWindow = false;
             IsRightClickRectangleBoundWindow = false;
@@ -252,7 +250,7 @@ namespace PrimSCADA
             IsBottomRightClickRectangleBoundWindow = false;
             IsCursorCapture = false;
         }
-        public void BExitOnClick(object? sender, RoutedEventArgs e)
+        protected void BExitOnClick(object? sender, RoutedEventArgs e)
         {
             Close();
         }

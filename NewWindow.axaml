@@ -5,7 +5,7 @@
         mc:Ignorable="d" 
         x:Class="PrimSCADA.NewWindow"
         Width="1024" Height="800" MinHeight="200" MinWidth="200"
-        ShowInTaskbar="False" SystemDecorations="BorderOnly" Initialized="NewWindowOnInitialized" CanResize="True" Opened="NewWindowOnOpened" PointerMoved="NewWindowOnPointerMoved">
+        ShowInTaskbar="False" SystemDecorations="BorderOnly" CanResize="True" Opened="NewWindowOnOpened" PointerMoved="NewWindowOnPointerMoved">
     <Grid Name="GridMain" RowDefinitions="30, *" ColumnDefinitions="200, Auto, *">
         <GridSplitter Grid.RowSpan="2" Grid.Column="1"></GridSplitter>
         <Grid Grid.ColumnSpan="3" PointerPressed="HeaderOnPointerPressed" PointerReleased="HeaderOnPointerReleased" PointerMoved="HeaderOnPointerMoved" PointerLeave="HeaderOnPointerLeave">
