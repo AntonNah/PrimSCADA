@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
-using Point = Avalonia.Point;
-using Rectangle = Avalonia.Controls.Shapes.Rectangle;
 
 namespace PrimSCADA
 {
     public class NewWindow : CustomWindow
     {
-        private Grid GridMain;
+        private Popup PopupMessage;
+        private Label LMessage;
         private ListBox LBSolution;
         private TextBox TBSolutionName;
         private bool IsShowToolTip;
@@ -30,10 +30,12 @@ namespace PrimSCADA
             
             CollectionLBSolution = new List<string>();
             TBSolutionName = new TextBox();
-            
+            LMessage = new Label();
+            LMessage.Content = "Error";
+            PopupMessage = new Popup();
+
             CollectionLBSolution.Add("Empty solution");
             
-            GridMain = this.FindControl<Grid>("GridMain");
             LBSolution = this.FindControl<ListBox>("LBSolution");
 
             Binding bLBSolution = new Binding();
@@ -105,6 +107,15 @@ namespace PrimSCADA
                 Button bCancel = new Button();
                 bCancel.Content = "Cancel";
                 bCancel.Click += BCancelOnClick;
+
+                PopupMessage.Width = 200;
+                PopupMessage.Height = 200;
+                PopupMessage.PlacementGravity = PopupGravity.Bottom;
+                PopupMessage.PlacementAnchor = PopupAnchor.Bottom;
+                PopupMessage.PlacementMode = PlacementMode.Bottom;
+                PopupMessage.Topmost = true;
+                PopupMessage.PlacementTarget = this;
+                PopupMessage.Child = LMessage;
                 
                 StackPanel sPanel = new StackPanel();
                 Grid.SetRow(sPanel, 4);
@@ -135,12 +146,14 @@ namespace PrimSCADA
                         IsShowToolTip = true;
                         return TBSolutionName.Text = ValidSolutionName;
                     });
+                    
+                    PopupMessage.Open();
                 }
                 else
                 {
                     if (!IsShowToolTip)
                     {
-                        
+                        //PopupMessage.IsOpen = false;
                     }
                     IsShowToolTip = false;
                     

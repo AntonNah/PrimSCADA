@@ -20,5 +20,8 @@
       <Compile Update="NewWindow.cs">
         <DependentUpon>NewWindow.axaml</DependentUpon>
       </Compile>
+      <Compile Update="CustomWindow.axaml.cs">
+        <DependentUpon>CustomWindow.axaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 </Project>
