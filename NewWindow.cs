@@ -30,9 +30,19 @@ namespace PrimSCADA
             
             CollectionLBSolution = new List<string>();
             TBSolutionName = new TextBox();
+            
             LMessage = new Label();
             LMessage.Content = "Error";
+            
             PopupMessage = new Popup();
+            PopupMessage.Width = LMessage.Width;
+            PopupMessage.Height = LMessage.Height;
+            PopupMessage.PlacementGravity = PopupGravity.Bottom;
+            PopupMessage.PlacementAnchor = PopupAnchor.Bottom;
+            PopupMessage.PlacementMode = PlacementMode.Bottom;
+            PopupMessage.Topmost = true;
+            PopupMessage.PlacementTarget = TBSolutionName;
+            PopupMessage.Child = LMessage;
 
             CollectionLBSolution.Add("Empty solution");
             
@@ -108,15 +118,6 @@ namespace PrimSCADA
                 bCancel.Content = "Cancel";
                 bCancel.Click += BCancelOnClick;
 
-                PopupMessage.Width = 200;
-                PopupMessage.Height = 200;
-                PopupMessage.PlacementGravity = PopupGravity.Bottom;
-                PopupMessage.PlacementAnchor = PopupAnchor.Bottom;
-                PopupMessage.PlacementMode = PlacementMode.Bottom;
-                PopupMessage.Topmost = true;
-                PopupMessage.PlacementTarget = this;
-                PopupMessage.Child = LMessage;
-                
                 StackPanel sPanel = new StackPanel();
                 Grid.SetRow(sPanel, 4);
                 Grid.SetColumnSpan(sPanel, 2);
@@ -147,13 +148,13 @@ namespace PrimSCADA
                         return TBSolutionName.Text = ValidSolutionName;
                     });
                     
-                    PopupMessage.Open();
+                    PopupMessage.IsOpen = true;
                 }
                 else
                 {
                     if (!IsShowToolTip)
                     {
-                        //PopupMessage.IsOpen = false;
+                        PopupMessage.IsOpen = false;
                     }
                     IsShowToolTip = false;
                     
