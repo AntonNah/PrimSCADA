@@ -32,17 +32,23 @@ namespace PrimSCADA
             TBSolutionName = new TextBox();
             
             LMessage = new Label();
-            LMessage.Content = "Error";
+            string s = "Error";
+            LMessage.Content = s;
+
+            Border border = new Border();
+            border.Width = 100;
+            border.Height = 100;
+            border.Background = Brushes.Red;
+            border.Child = LMessage;
             
             PopupMessage = new Popup();
-            PopupMessage.Width = LMessage.Width;
-            PopupMessage.Height = LMessage.Height;
-            PopupMessage.PlacementGravity = PopupGravity.Bottom;
+            PopupMessage.Opacity = 50;
+            PopupMessage.Width = 100;
+            PopupMessage.Height = 100;
+            PopupMessage.IsLightDismissEnabled = true;
             PopupMessage.PlacementAnchor = PopupAnchor.Bottom;
-            PopupMessage.PlacementMode = PlacementMode.Bottom;
-            PopupMessage.Topmost = true;
             PopupMessage.PlacementTarget = TBSolutionName;
-            PopupMessage.Child = LMessage;
+            PopupMessage.Child = border;
 
             CollectionLBSolution.Add("Empty solution");
             
