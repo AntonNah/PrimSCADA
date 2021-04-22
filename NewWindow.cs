@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -20,6 +21,7 @@ namespace PrimSCADA
         private Label LMessage;
         private ListBox LBSolution;
         private TextBox TBSolutionName;
+        private TextBox TBSolutionDirectory;
         private bool IsShowPopupSolutionName;
         private int SolutionNameLength;
         private char[] InvalidChars;
@@ -105,10 +107,19 @@ namespace PrimSCADA
                 Grid.SetRow(TBSolutionName, 1);
                 Grid.SetColumn(TBSolutionName, 1);
 
-                TextBox tbSolutionDirectory = new TextBox();
-                tbSolutionDirectory.Text = ((App) Application.Current).Settings.DirectoryPath;
-                Grid.SetRow(tbSolutionDirectory, 2);
-                Grid.SetColumn(tbSolutionDirectory, 1);
+                Button bBrowse = new Button();
+                bBrowse.Click += BBrowseOnClick;
+                bBrowse.Content = "Browse";
+                
+                TBSolutionDirectory = new TextBox();
+                TBSolutionDirectory.Text = ((App) Application.Current).Settings.DirectoryPath;
+
+                StackPanel stackPanel = new StackPanel();
+                stackPanel.Orientation = Orientation.Horizontal;
+                stackPanel.Children.Add(TBSolutionDirectory);
+                stackPanel.Children.Add(bBrowse);
+                Grid.SetRow(stackPanel, 2);
+                Grid.SetColumn(stackPanel, 1);
 
                 CheckBox chbCreateDirectory = new CheckBox();
                 chbCreateDirectory.Content = "Create directory for the solution";
@@ -137,10 +148,24 @@ namespace PrimSCADA
                 gridEmptySolution.Children.Add(labelSolutionName);
                 gridEmptySolution.Children.Add(TBSolutionName);
                 gridEmptySolution.Children.Add(labelSolutionDirectory);
-                gridEmptySolution.Children.Add(tbSolutionDirectory);
+                gridEmptySolution.Children.Add(stackPanel);
                 gridEmptySolution.Children.Add(chbCreateDirectory);
                 gridEmptySolution.Children.Add(sPanel);
             }
+        }
+
+        public async Task<string> GetPath()
+        {
+            OpenFolderDialog openFolderDialog = new OpenFolderDialog();
+            openFolderDialog.Directory = TBSolutionDirectory.Text;
+            string s = await openFolderDialog.ShowAsync(this);
+            return s;
+        }
+
+        private async void BBrowseOnClick(object? sender, RoutedEventArgs e)
+        {
+            TBSolutionDirectory.Text = await GetPath();
+
         }
 
         private void OnNext(string s)
