@@ -20,35 +20,36 @@ namespace PrimSCADA
         private Label LMessage;
         private ListBox LBSolution;
         private TextBox TBSolutionName;
-        private bool IsShowToolTip;
+        private bool IsShowPopupSolutionName;
+        private int SolutionNameLength;
+        private char[] InvalidChars;
         private string ValidSolutionName;
         private List<string> CollectionLBSolution;
         
         private new void NewWindowOnOpened(object? sender, EventArgs e)
         {
             base.NewWindowOnOpened(sender, e);
+
+            InvalidChars = new char[] {'"', '/', '\\', '<', '>', '?', '*', '|', ':'};
+            
+            SolutionNameLength = 70;
             
             CollectionLBSolution = new List<string>();
             TBSolutionName = new TextBox();
             
             LMessage = new Label();
-            string s = "Error";
-            LMessage.Content = s;
 
             Border border = new Border();
-            border.Width = 100;
-            border.Height = 100;
             border.Background = Brushes.Red;
             border.Child = LMessage;
-            
+
             PopupMessage = new Popup();
-            PopupMessage.Opacity = 50;
-            PopupMessage.Width = 100;
-            PopupMessage.Height = 100;
             PopupMessage.IsLightDismissEnabled = true;
             PopupMessage.PlacementAnchor = PopupAnchor.Bottom;
             PopupMessage.PlacementTarget = TBSolutionName;
             PopupMessage.Child = border;
+            
+            GridMain.Children.Add(PopupMessage);
 
             CollectionLBSolution.Add("Empty solution");
             
@@ -146,11 +147,25 @@ namespace PrimSCADA
         {
             if (s != null)
             {
-                if (s.Length > 50)
+                if (s.Length > SolutionNameLength)
                 {
+                    LMessage.Content = "Solution length must not exceed " + SolutionNameLength + " characters.";
+                    
                     Dispatcher.UIThread.InvokeAsync(() =>
                     {
-                        IsShowToolTip = true;
+                        IsShowPopupSolutionName = true;
+                        return TBSolutionName.Text = ValidSolutionName;
+                    });
+                    
+                    PopupMessage.IsOpen = true;
+                }
+                else if (s.IndexOfAny(InvalidChars) != -1)
+                {
+                    LMessage.Content = "solution name must not contain characters: < > | \" / \\ * : ?";
+                    
+                    Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        IsShowPopupSolutionName = true;
                         return TBSolutionName.Text = ValidSolutionName;
                     });
                     
@@ -158,11 +173,11 @@ namespace PrimSCADA
                 }
                 else
                 {
-                    if (!IsShowToolTip)
+                    if (!IsShowPopupSolutionName)
                     {
                         PopupMessage.IsOpen = false;
                     }
-                    IsShowToolTip = false;
+                    IsShowPopupSolutionName = false;
                     
                     ValidSolutionName = s;
                 }
