@@ -34,5 +34,10 @@ namespace PrimSCADA
             NewWindow newWindow = new NewWindow();
             newWindow.ShowDialog(this);
         }
+
+        private void MenuItemSettingsOnClick(object? sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }

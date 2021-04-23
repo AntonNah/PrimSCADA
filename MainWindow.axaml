@@ -17,6 +17,9 @@
                 <Separator></Separator>
                 <MenuItem Header="Exit" Click="MenuItem_OnClickExit"></MenuItem>
             </MenuItem>
+            <MenuItem Header="Tools">
+                <MenuItem Header="Setting..." Click="MenuItemSettingsOnClick"></MenuItem>
+            </MenuItem>
         </Menu>
     </Grid>
 </Window>
