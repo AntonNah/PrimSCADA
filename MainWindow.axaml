@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="PrimSCADA.MainWindow"
-        Title="PrimSCADA" WindowState="Maximized">
+        Title="PrimSCADA" WindowState="Maximized" >
     <Grid RowDefinitions="30">
         <Menu Grid.Row="0">
             <MenuItem Header="File">

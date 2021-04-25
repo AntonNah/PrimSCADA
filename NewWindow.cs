@@ -15,10 +15,11 @@ using Avalonia.Threading;
 
 namespace PrimSCADA
 {
-    public class NewWindow : CustomWindow
+    public class NewWindow : Window
     {
         private Popup PopupMessage;
         private Label LMessage;
+        private Grid GridMain;
         private ListBox LBSolution;
         private TextBox TBSolutionName;
         private TextBox TBSolutionDirectory;
@@ -30,8 +31,18 @@ namespace PrimSCADA
         
         private new void NewWindowOnOpened(object? sender, EventArgs e)
         {
-            base.NewWindowOnOpened(sender, e);
-
+            Screens screens = new Window().Screens;
+            PixelRect pr = screens.Primary.Bounds;
+            PixelPoint pp = new PixelPoint(pr.BottomRight.X / 5, pr.BottomRight.Y / 5) ;
+            Position = pp;
+            
+            GridMain = this.FindControl<Grid>("GridMain");
+            LBSolution = this.FindControl<ListBox>("LBSolution");
+            
+            ColumnDefinition column2 =  GridMain.ColumnDefinitions[0];
+            column2.MaxWidth = 600;
+            column2.MinWidth = 200;
+            
             InvalidChars = new char[] {'"', '/', '\\', '<', '>', '?', '*', '|', ':'};
             
             SolutionNameLength = 70;
@@ -54,8 +65,6 @@ namespace PrimSCADA
             GridMain.Children.Add(PopupMessage);
 
             CollectionLBSolution.Add("Empty solution");
-            
-            LBSolution = this.FindControl<ListBox>("LBSolution");
 
             Binding bLBSolution = new Binding();
             bLBSolution.Source = CollectionLBSolution;
@@ -78,7 +87,6 @@ namespace PrimSCADA
                 RowDefinition rw2 = new RowDefinition(GridLength.Auto);
                 RowDefinition rw3 = new RowDefinition(GridLength.Auto);
                 RowDefinition rw4 = new RowDefinition(GridLength.Auto);
-                RowDefinition rw5 = new RowDefinition(GridLength.Auto);
 
                 ColumnDefinition cm = new ColumnDefinition(GridLength.Auto);
                 ColumnDefinition cm2 = new ColumnDefinition(GridLength.Auto);
@@ -87,7 +95,6 @@ namespace PrimSCADA
                 gridEmptySolution.RowDefinitions.Add(rw2);
                 gridEmptySolution.RowDefinitions.Add(rw3);
                 gridEmptySolution.RowDefinitions.Add(rw4);
-                gridEmptySolution.RowDefinitions.Add(rw5);
                 gridEmptySolution.ColumnDefinitions.Add(cm);
                 gridEmptySolution.ColumnDefinitions.Add(cm2);
                 
@@ -103,7 +110,8 @@ namespace PrimSCADA
                 labelSolutionDirectory.Content = "Solution directory:";
                 Grid.SetRow(labelSolutionDirectory, 2);
                 
-                TBSolutionName.GetObservable(TextBox.TextProperty).Subscribe(OnNext);
+                TBSolutionName.GetObservable(TextBox.TextProperty).Subscribe(SolutionTextChange);
+                TBSolutionName.Text = "";
                 Grid.SetRow(TBSolutionName, 1);
                 Grid.SetColumn(TBSolutionName, 1);
 
@@ -121,11 +129,6 @@ namespace PrimSCADA
                 Grid.SetRow(stackPanel, 2);
                 Grid.SetColumn(stackPanel, 1);
 
-                CheckBox chbCreateDirectory = new CheckBox();
-                chbCreateDirectory.Content = "Create directory for the solution";
-                Grid.SetRow(chbCreateDirectory, 3);
-                Grid.SetColumn(chbCreateDirectory, 1);
-
                 DockPanel dPanel = new DockPanel();
                 
                 Button bCreate = new Button();
@@ -137,7 +140,8 @@ namespace PrimSCADA
                 bCancel.Click += BCancelOnClick;
 
                 StackPanel sPanel = new StackPanel();
-                Grid.SetRow(sPanel, 4);
+                sPanel.Margin = new Thickness(0, 100, 0, 0);
+                Grid.SetRow(sPanel, 3);
                 Grid.SetColumnSpan(sPanel, 2);
                 sPanel.Orientation = Orientation.Horizontal;
                 sPanel.HorizontalAlignment = HorizontalAlignment.Right;
@@ -149,12 +153,11 @@ namespace PrimSCADA
                 gridEmptySolution.Children.Add(TBSolutionName);
                 gridEmptySolution.Children.Add(labelSolutionDirectory);
                 gridEmptySolution.Children.Add(stackPanel);
-                gridEmptySolution.Children.Add(chbCreateDirectory);
                 gridEmptySolution.Children.Add(sPanel);
             }
         }
 
-        public async Task<string> GetPath()
+        private async Task<string> GetPath()
         {
             OpenFolderDialog openFolderDialog = new OpenFolderDialog();
             openFolderDialog.Directory = TBSolutionDirectory.Text;
@@ -164,12 +167,16 @@ namespace PrimSCADA
 
         private async void BBrowseOnClick(object? sender, RoutedEventArgs e)
         {
-            TBSolutionDirectory.Text = await GetPath();
-
+            string s = await GetPath();
+            if (s != "")
+            {
+                TBSolutionDirectory.Text = s;
+            }
         }
 
-        private void OnNext(string s)
+        private void SolutionTextChange(string s)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (s != null)
             {
                 if (s.Length > SolutionNameLength)
@@ -217,47 +224,6 @@ namespace PrimSCADA
         private void BCreateOnClick(object? sender, RoutedEventArgs e)
         {
             Close();
-        }
-        
-        public new void NewWindowOnPointerMoved(object? sender, PointerEventArgs e)
-        {
-            base.NewWindowOnPointerMoved(sender, e);
-        }
-        public new void HeaderOnPointerPressed(object? sender, PointerPressedEventArgs e)
-        {
-            base.HeaderOnPointerPressed(sender, e);
-        }
-        public new void HeaderOnPointerReleased(object? sender, PointerReleasedEventArgs e)
-        {
-            base.HeaderOnPointerReleased(sender, e);
-        }
-        public new void HeaderOnPointerMoved(object? sender, PointerEventArgs e)
-        {
-            base.HeaderOnPointerMoved(sender, e);
-        }
-        public new void HeaderOnPointerLeave(object? sender, PointerEventArgs e)
-        {
-            base.HeaderOnPointerLeave(sender, e);
-        }
-        public new void RectangleBoundOnPointerMoved(object? sender, PointerEventArgs e)
-        {
-            base.RectangleBoundOnPointerMoved(sender, e);
-        }
-        public new void RectangleBoundOnPointerLeave(object? sender, PointerEventArgs e)
-        {
-            base.RectangleBoundOnPointerLeave(sender, e);
-        }
-        public new void RectangleBoundOnPointerPressed(object? sender, PointerPressedEventArgs e)
-        {
-            base.RectangleBoundOnPointerPressed(sender, e);
-        }
-        public new  void RectangleBoundOnPointerReleased(object? sender, PointerReleasedEventArgs e)
-        {
-            base.RectangleBoundOnPointerReleased(sender, e);
-        }
-        public new void BExitOnClick(object? sender, RoutedEventArgs e)
-        {
-            base.BExitOnClick(sender, e);
         }
     }
 }

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 
 namespace PrimSCADA
 {
@@ -21,6 +22,21 @@ namespace PrimSCADA
             AvaloniaXamlLoader.Load(this);
         }
 
+        protected override void HandleWindowStateChanged(WindowState state)
+        {
+            if (state == WindowState.Minimized)
+            {
+                Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    WindowState = WindowState.Normal;
+                });
+                
+            }
+                
+            
+                base.HandleWindowStateChanged(state);
+        }
+
         private void MenuItem_OnClickExit(object? sender, RoutedEventArgs e)
         {
             if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
@@ -37,7 +53,8 @@ namespace PrimSCADA
 
         private void MenuItemSettingsOnClick(object? sender, RoutedEventArgs e)
         {
-            
+            SettingsWindow settingsWindow = new SettingsWindow();
+            settingsWindow.ShowDialog(this);
         }
     }
 }
