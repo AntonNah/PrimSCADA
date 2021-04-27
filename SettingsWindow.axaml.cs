@@ -160,8 +160,11 @@ namespace PrimSCADA
 
         private async void BBrowseOnClick(object? sender, RoutedEventArgs e)
         {
-            TBSolutionDirectory.Text = await GetPath();
-
+            string s = await GetPath();
+            if (s != "")
+            {
+                TBSolutionDirectory.Text = s;
+            }
         }
 
         private void OnNext(string s)

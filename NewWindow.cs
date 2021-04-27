@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -223,6 +224,11 @@ namespace PrimSCADA
 
         private void BCreateOnClick(object? sender, RoutedEventArgs e)
         {
+            if (((App) Application.Current).Settings.CreateDirectory)
+            {
+                File.Create(TBSolutionDirectory.Text + TBSolutionName.Text + ".ps");
+            }
+            
             Close();
         }
     }
