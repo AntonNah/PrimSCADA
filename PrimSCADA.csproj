@@ -5,12 +5,12 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.2" />
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.2" />
-        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.2" />
-        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.2" />
+        <PackageReference Include="Avalonia" Version="0.10.3" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.3" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.3" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.3" />
         <PackageReference Include="protobuf-net" Version="3.0.101" />
-        <PackageReference Include="ScottPlot.Avalonia" Version="4.1.12-beta" />
+        <PackageReference Include="ScottPlot.Avalonia" Version="4.1.13-beta" />
         <PackageReference Include="System.IO.Ports" Version="6.0.0-preview.3.21201.4" />
     </ItemGroup>
     <ItemGroup>

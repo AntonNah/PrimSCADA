@@ -12,6 +12,7 @@ public class Settings
 
     public Settings()
     {
+        CreateDirectory = true;
         DirectoryPath = Directory.GetCurrentDirectory();
     }
 }

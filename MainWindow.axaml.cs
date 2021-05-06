@@ -22,7 +22,7 @@ namespace PrimSCADA
             AvaloniaXamlLoader.Load(this);
         }
 
-        protected override void HandleWindowStateChanged(WindowState state)
+        /*protected override void HandleWindowStateChanged(WindowState state)
         {
             if (state == WindowState.Minimized)
             {
@@ -32,10 +32,9 @@ namespace PrimSCADA
                 });
                 
             }
-                
-            
-                base.HandleWindowStateChanged(state);
-        }
+
+            base.HandleWindowStateChanged(state);
+        }*/
 
         private void MenuItem_OnClickExit(object? sender, RoutedEventArgs e)
         {

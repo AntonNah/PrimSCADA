@@ -98,10 +98,10 @@ namespace PrimSCADA
                 gridEmptySolution.RowDefinitions.Add(rw4);
                 gridEmptySolution.ColumnDefinitions.Add(cm);
                 gridEmptySolution.ColumnDefinitions.Add(cm2);
-                
-                Label labelCaption = new Label();
-                labelCaption.FontStyle = FontStyle.Italic;
-                labelCaption.Content = "Empty solution";
+
+                TextBlock textCaption = new TextBlock();
+                textCaption.Text = "Empty solution";
+                textCaption.FontWeight = FontWeight.Bold;
 
                 Label labelSolutionName = new Label();
                 labelSolutionName.Content = "Solution name:";
@@ -149,7 +149,7 @@ namespace PrimSCADA
                 sPanel.Children.Add(bCreate);
                 sPanel.Children.Add(bCancel);
 
-                gridEmptySolution.Children.Add(labelCaption);
+                gridEmptySolution.Children.Add(textCaption);
                 gridEmptySolution.Children.Add(labelSolutionName);
                 gridEmptySolution.Children.Add(TBSolutionName);
                 gridEmptySolution.Children.Add(labelSolutionDirectory);
@@ -224,9 +224,21 @@ namespace PrimSCADA
 
         private void BCreateOnClick(object? sender, RoutedEventArgs e)
         {
-            if (((App) Application.Current).Settings.CreateDirectory)
+            try
             {
-                File.Create(TBSolutionDirectory.Text + TBSolutionName.Text + ".ps");
+                if (((App)Application.Current).Settings.CreateDirectory)
+                {
+                    File.Create(TBSolutionDirectory.Text + TBSolutionName.Text + "\\" + TBSolutionName.Text + ".ps");
+                }
+                else
+                {
+                    File.Create(TBSolutionDirectory.Text + "\\" + TBSolutionName.Text + ".ps");
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                throw;
             }
             
             Close();

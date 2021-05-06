@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -13,6 +14,7 @@ using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
+using ProtoBuf;
 
 namespace PrimSCADA
 {
@@ -23,10 +25,9 @@ namespace PrimSCADA
         private ListBox LBSettings;
         private Grid GridMain;
         private TextBox TBSolutionDirectory;
+        private CheckBox ChbCreateDirectory;
         private bool IsShowPopupSolutionName;
         private int SolutionNameLength;
-        private char[] InvalidChars;
-        private string ValidSolutionName;
         private List<string> CollectionLBSolution;
         
         private new void SettingsWindowOnOpened(object? sender, EventArgs e)
@@ -42,9 +43,7 @@ namespace PrimSCADA
             ColumnDefinition column2 =  GridMain.ColumnDefinitions[0];
             column2.MaxWidth = 600;
             column2.MinWidth = 200;
-            
-            InvalidChars = new char[] {'"', '/', '\\', '<', '>', '?', '*', '|', ':'};
-            
+
             SolutionNameLength = 70;
             
             CollectionLBSolution = new List<string>();
@@ -58,7 +57,7 @@ namespace PrimSCADA
             PopupMessage = new Popup();
             PopupMessage.IsLightDismissEnabled = true;
             PopupMessage.PlacementAnchor = PopupAnchor.Bottom;
-           // PopupMessage.PlacementTarget = TBSolutionName;
+            PopupMessage.PlacementTarget = TBSolutionDirectory;
             PopupMessage.Child = border;
             
             GridMain.Children.Add(PopupMessage);
@@ -96,19 +95,19 @@ namespace PrimSCADA
                 gridEmptySolution.RowDefinitions.Add(rw4);
                 gridEmptySolution.ColumnDefinitions.Add(cm);
                 gridEmptySolution.ColumnDefinitions.Add(cm2);
-                
-                Label labelCaption = new Label();
-                labelCaption.FontStyle = FontStyle.Italic;
-                labelCaption.Content = "General";
 
+                TextBlock textCaption = new TextBlock();
+                textCaption.Text = "General";
+                textCaption.FontWeight = FontWeight.Bold;
+  
                 Label labelSolutionDirectory = new Label();
                 labelSolutionDirectory.Content = "Solution directory:";
                 Grid.SetRow(labelSolutionDirectory, 1);
 
                 Button bBrowse = new Button();
-                bBrowse.Click += BBrowseOnClick;
                 bBrowse.Content = "Browse";
-                
+                bBrowse.Click += BBrowseOnClick;
+
                 TBSolutionDirectory = new TextBox();
                 TBSolutionDirectory.Text = ((App) Application.Current).Settings.DirectoryPath;
 
@@ -119,16 +118,19 @@ namespace PrimSCADA
                 Grid.SetRow(stackPanel, 1);
                 Grid.SetColumn(stackPanel, 1);
 
-                CheckBox chbCreateDirectory = new CheckBox();
-                chbCreateDirectory.Content = "Create directory for the solution";
-                Grid.SetRow(chbCreateDirectory, 2);
-                Grid.SetColumn(chbCreateDirectory, 1);
+                ChbCreateDirectory = new CheckBox();
+                ChbCreateDirectory.IsChecked = ((App) Application.Current).Settings.CreateDirectory;
+                ChbCreateDirectory.Content = "Create directory for the solution";
+                Grid.SetRow(ChbCreateDirectory, 2);
+                Grid.SetColumn(ChbCreateDirectory, 1);
 
-                DockPanel dPanel = new DockPanel();
+                Button bSaveAndClose = new Button();
+                bSaveAndClose.Content = "Save and close";
+                bSaveAndClose.Click += BSaveAndCloseOnClick;
                 
-                Button bCreate = new Button();
-                bCreate.Content = "Save";
-                bCreate.Click += BCreateOnClick;
+                Button bSave = new Button();
+                bSave.Content = "Save";
+                bSave.Click += BSaveOnClick;
 
                 Button bCancel = new Button();
                 bCancel.Content = "Cancel";
@@ -139,17 +141,18 @@ namespace PrimSCADA
                 Grid.SetColumnSpan(sPanel, 2);
                 sPanel.Orientation = Orientation.Horizontal;
                 sPanel.HorizontalAlignment = HorizontalAlignment.Right;
-                sPanel.Children.Add(bCreate);
+                sPanel.Children.Add(bSaveAndClose);
+                sPanel.Children.Add(bSave);
                 sPanel.Children.Add(bCancel);
 
-                gridEmptySolution.Children.Add(labelCaption);
+                gridEmptySolution.Children.Add(textCaption);
                 gridEmptySolution.Children.Add(labelSolutionDirectory);
                 gridEmptySolution.Children.Add(stackPanel);
-                gridEmptySolution.Children.Add(chbCreateDirectory);
+                gridEmptySolution.Children.Add(ChbCreateDirectory);
                 gridEmptySolution.Children.Add(sPanel);
             }
         }
-
+        
         public async Task<string> GetPath()
         {
             OpenFolderDialog openFolderDialog = new OpenFolderDialog();
@@ -167,55 +170,32 @@ namespace PrimSCADA
             }
         }
 
-        private void OnNext(string s)
-        {
-            if (s != null)
-            {
-                if (s.Length > SolutionNameLength)
-                {
-                    LMessage.Content = "Solution length must not exceed " + SolutionNameLength + " characters.";
-                    
-                    Dispatcher.UIThread.InvokeAsync(() =>
-                    {
-                        IsShowPopupSolutionName = true;
-                        //return TBSolutionName.Text = ValidSolutionName;
-                    });
-                    
-                    PopupMessage.IsOpen = true;
-                }
-                else if (s.IndexOfAny(InvalidChars) != -1)
-                {
-                    LMessage.Content = "solution name must not contain characters: < > | \" / \\ * : ?";
-                    
-                    Dispatcher.UIThread.InvokeAsync(() =>
-                    {
-                        IsShowPopupSolutionName = true;
-                        //return TBSolutionName.Text = ValidSolutionName;
-                    });
-                    
-                    PopupMessage.IsOpen = true;
-                }
-                else
-                {
-                    if (!IsShowPopupSolutionName)
-                    {
-                        PopupMessage.IsOpen = false;
-                    }
-                    IsShowPopupSolutionName = false;
-                    
-                    ValidSolutionName = s;
-                }
-            }
-        }
-
         private void BCancelOnClick(object? sender, RoutedEventArgs e)
         {
             Close();
         }
-
-        private void BCreateOnClick(object? sender, RoutedEventArgs e)
+        
+        private void BSaveAndCloseOnClick(object? sender, RoutedEventArgs e)
         {
+            Save();
             Close();
+        }
+
+        private void BSaveOnClick(object? sender, RoutedEventArgs e)
+        {
+            Save();
+        }
+        
+        void Save()
+        {
+            string s = Directory.GetCurrentDirectory() + @"\Settings.bin";
+            Settings settings = ((App)Application.Current).Settings;
+            settings.CreateDirectory = (bool)ChbCreateDirectory.IsChecked;
+            settings.DirectoryPath = TBSolutionDirectory.Text;
+            using (var file = File.Create(s))
+            {
+                Serializer.Serialize(file, settings);
+            }
         }
     }
 }
