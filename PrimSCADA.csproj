@@ -23,5 +23,8 @@
       <Compile Update="CustomWindow.axaml.cs">
         <DependentUpon>CustomWindow.axaml</DependentUpon>
       </Compile>
+      <Compile Update="MessageWindow.cs">
+        <DependentUpon>MessageWindow.axaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 </Project>

@@ -157,7 +157,6 @@ namespace PrimSCADA
                 gridEmptySolution.Children.Add(sPanel);
             }
         }
-
         private async Task<string> GetPath()
         {
             OpenFolderDialog openFolderDialog = new OpenFolderDialog();
@@ -165,7 +164,6 @@ namespace PrimSCADA
             string s = await openFolderDialog.ShowAsync(this);
             return s;
         }
-
         private async void BBrowseOnClick(object? sender, RoutedEventArgs e)
         {
             string s = await GetPath();
@@ -174,7 +172,6 @@ namespace PrimSCADA
                 TBSolutionDirectory.Text = s;
             }
         }
-
         private void SolutionTextChange(string s)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
@@ -216,19 +213,30 @@ namespace PrimSCADA
                 }
             }
         }
-
         private void BCancelOnClick(object? sender, RoutedEventArgs e)
         {
             Close();
         }
-
-        private void BCreateOnClick(object? sender, RoutedEventArgs e)
+        private async Task MessageBox()
+        {
+            MessageWindow mw = new MessageWindow("File with that name already exists, overwrite it?", "Yes", "Cancel");
+            await mw.ShowDialog(this);
+        }
+        private async void BCreateOnClick(object? sender, RoutedEventArgs e)
         {
             try
             {
                 if (((App)Application.Current).Settings.CreateDirectory)
                 {
-                    File.Create(TBSolutionDirectory.Text + TBSolutionName.Text + "\\" + TBSolutionName.Text + ".ps");
+                    string s = TBSolutionDirectory.Text + "\\" + TBSolutionName.Text;
+                    
+                    if (File.Exists(s + "\\" + TBSolutionName.Text + ".ps"))
+                    {
+                        await MessageBox();
+                    }
+                    
+                    Directory.CreateDirectory(s);
+                    File.Create(s + "\\" + TBSolutionName.Text + ".ps");
                 }
                 else
                 {
@@ -237,8 +245,9 @@ namespace PrimSCADA
             }
             catch (Exception exception)
             {
-                Console.WriteLine(exception);
-                throw;
+                MessageWindow errorWindow = new MessageWindow(exception.Message, "Close");
+                errorWindow.ShowDialog(this);
+                return;
             }
             
             Close();
