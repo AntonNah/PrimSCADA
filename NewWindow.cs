@@ -219,7 +219,7 @@ namespace PrimSCADA
         }
         private async Task MessageBox()
         {
-            MessageWindow mw = new MessageWindow("File with that name already exists, overwrite it?", "Yes", "Cancel");
+            MessageBoxWindow mw = new MessageBoxWindow("File with that name already exists, overwrite it?", "Yes", "Cancel");
             await mw.ShowDialog(this);
         }
         private async void BCreateOnClick(object? sender, RoutedEventArgs e)
@@ -245,7 +245,7 @@ namespace PrimSCADA
             }
             catch (Exception exception)
             {
-                MessageWindow errorWindow = new MessageWindow(exception.Message, "Close");
+                MessageBoxWindow errorWindow = new MessageBoxWindow(exception.Message, "Close");
                 errorWindow.ShowDialog(this);
                 return;
             }

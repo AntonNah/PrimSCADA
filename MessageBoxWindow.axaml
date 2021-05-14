@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" 
-        x:Class="PrimSCADA.MessageWindow"
+        x:Class="PrimSCADA.MessageBoxWindow"
         SizeToContent="WidthAndHeight"
         ShowInTaskbar="False" CanResize="True" Opened="NewWindowOnOpened">
     <Grid Name="GridMain" RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto">

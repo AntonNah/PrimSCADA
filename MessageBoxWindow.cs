@@ -19,7 +19,7 @@ using Tmds.DBus;
 namespace PrimSCADA
 {
     [Flags]
-    public enum MessageWindowButtons
+    public enum EnumMessageBoxButtons
     {
         None = 0,
         Yes = 1,
@@ -28,62 +28,63 @@ namespace PrimSCADA
         All = ~None,
     }
     
-    public class BitOperations
+    public class MessageBoxButtons
     {
-        public MessageWindowButtons Value { get; private set; }
+        public EnumMessageBoxButtons Value { get; private set; }
 
-        public void Add(MessageWindowButtons value)
+        public void Add(EnumMessageBoxButtons value)
         {
             Value |= value;
         }
 
-        public void Remove(MessageWindowButtons value)
+        public void Remove(EnumMessageBoxButtons value)
         {
             Value ^= value;
         }
 
-        public bool Contains(MessageWindowButtons value)
+        public bool Contains(EnumMessageBoxButtons value)
         {
             return (Value & value) == value;
         }
 
         public override string ToString()
         {
-            Value.ToString("G");
+            return Value.ToString("G");
         }
 
-        public BitOperations()
+        public MessageBoxButtons()
         {
-            Value = MessageWindowButtons.None;
+            Value = EnumMessageBoxButtons.None;
         }
 
-        public BitOperations(MessageWindowButtons value)
+        public MessageBoxButtons(EnumMessageBoxButtons value)
         {
             Value = value;
         }
     }
-    public class MessageWindow : Window
+    public class MessageBoxWindow : Window
     {
         private Grid GridMain;
         private TextBox TBErrorMessage;
         private Button BOk;
         private Button BClose;
+        public MessageBoxButtons MessageBoxButtons;
         private readonly string SErrorMessage;
         private readonly string SOk;
         private readonly string SClose;
 
-        public MessageWindow()
+        public MessageBoxWindow()
         {
             
         }
-        public MessageWindow(string s, string ok, string close)
+        public MessageBoxWindow(string s, string ok, string close)
         {
             InitializeComponent();
             SErrorMessage = s;
             SOk = ok;
             SClose = close;
         }
-        public MessageWindow(string s, string close)
+        public MessageBoxWindow(string s, string close)
         {
             InitializeComponent();
             SErrorMessage = s;
