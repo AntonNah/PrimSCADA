@@ -18,77 +18,54 @@ using Tmds.DBus;
 
 namespace PrimSCADA
 {
-    [Flags]
-    public enum EnumMessageBoxButtons
-    {
-        None = 0,
-        Yes = 1,
-        No = 2,
-        Cancel = 4,
-        All = ~None,
-    }
-    
-    public class MessageBoxButtons
-    {
-        public EnumMessageBoxButtons Value { get; private set; }
-
-        public void Add(EnumMessageBoxButtons value)
-        {
-            Value |= value;
-        }
-
-        public void Remove(EnumMessageBoxButtons value)
-        {
-            Value ^= value;
-        }
-
-        public bool Contains(EnumMessageBoxButtons value)
-        {
-            return (Value & value) == value;
-        }
-
-        public override string ToString()
-        {
-            return Value.ToString("G");
-        }
-
-        public MessageBoxButtons()
-        {
-            Value = EnumMessageBoxButtons.None;
-        }
-
-        public MessageBoxButtons(EnumMessageBoxButtons value)
-        {
-            Value = value;
-        }
-    }
     public class MessageBoxWindow : Window
     {
+        public bool IsVisibleOk
+        {
+            set
+            {
+                if (BOk != null)
+                {
+                    BOk.IsVisible = value;
+                }
+            }
+        }
+
+        public string TextButtonOk
+        {
+            set
+            {
+                if (BOk != null)
+                {
+                    BOk.Content = value;
+                }
+            }
+        }
+
+        public bool IsBOk
+        {
+            get;
+            set;
+        }
         private Grid GridMain;
-        private TextBox TBErrorMessage;
+        private TextBox TBMessage;
         private Button BOk;
-        private Button BClose;
-        public MessageBoxButtons MessageBoxButtons;
-        private readonly string SErrorMessage;
+        private Button BCancel;
+        private readonly string SMessage;
         private readonly string SOk;
         private readonly string SClose;
-
         public MessageBoxWindow()
         {
             
         }
-        public MessageBoxWindow(string s, string ok, string close)
+        public MessageBoxWindow(string sMessage)
         {
             InitializeComponent();
-            SErrorMessage = s;
-            SOk = ok;
-            SClose = close;
-        }
-        public MessageBoxWindow(string s, string close)
-        {
-            InitializeComponent();
-            SErrorMessage = s;
-            SClose = close;
+            GridMain = this.FindControl<Grid>("GridMain");
+            BOk = this.FindControl<Button>("BOk");
+            BCancel = this.FindControl<Button>("BClose");
+            TBMessage = this.FindControl<TextBox>("TBErrorMessage");
+            TBMessage.Text = sMessage;
         }
         private void InitializeComponent()
         {
@@ -100,21 +77,13 @@ namespace PrimSCADA
             PixelRect pr = screens.Primary.Bounds;
             PixelPoint pp = new PixelPoint(pr.BottomRight.X / 5, pr.BottomRight.Y / 5) ;
             Position = pp;
-            
-            GridMain = this.FindControl<Grid>("GridMain");
-            BOk = this.FindControl<Button>("BOk");
-            BClose = this.FindControl<Button>("BClose");
-            TBErrorMessage = this.FindControl<TextBox>("TBErrorMessage");
-            TBErrorMessage.Text = SErrorMessage;
-            
-            if()
-
         }
         private void BOkOnClick(object? sender, RoutedEventArgs e)
         {
+            IsBOk = true;
             Close();
         }
-        private void BCloseOnClick(object? sender, RoutedEventArgs e)
+        private void BCancelOnClick(object? sender, RoutedEventArgs e)
         {
             Close();
         }

@@ -217,10 +217,13 @@ namespace PrimSCADA
         {
             Close();
         }
-        private async Task MessageBox()
+        private async Task<bool> MessageBox()
         {
-            MessageBoxWindow mw = new MessageBoxWindow("File with that name already exists, overwrite it?", "Yes", "Cancel");
-            await mw.ShowDialog(this);
+            MessageBoxWindow mb = new MessageBoxWindow("File with that name already exists, overwrite it?");
+            mb.IsVisibleOk = true;
+            mb.TextButtonOk = "Yes";
+            await mb.ShowDialog(this);
+            return mb.IsBOk;
         }
         private async void BCreateOnClick(object? sender, RoutedEventArgs e)
         {
@@ -232,7 +235,10 @@ namespace PrimSCADA
                     
                     if (File.Exists(s + "\\" + TBSolutionName.Text + ".ps"))
                     {
-                        await MessageBox();
+                        if (await MessageBox())
+                        {
+                            
+                        }
                     }
                     
                     Directory.CreateDirectory(s);
@@ -245,7 +251,7 @@ namespace PrimSCADA
             }
             catch (Exception exception)
             {
-                MessageBoxWindow errorWindow = new MessageBoxWindow(exception.Message, "Close");
+                MessageBoxWindow errorWindow = new MessageBoxWindow(exception.Message);
                 errorWindow.ShowDialog(this);
                 return;
             }

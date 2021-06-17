@@ -9,8 +9,8 @@
     <Grid Name="GridMain" RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto">
         <TextBox TextWrapping="WrapWithOverflow" Name="TBErrorMessage" IsReadOnly="True"></TextBox>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-            <Button Name="BOk" Click="BOkOnClick"></Button>
-            <Button Name="BClose" Click="BCloseOnClick"></Button>
+            <Button Name="BOk" IsVisible="False" Click="BOkOnClick"></Button>
+            <Button Name="BCancel" Click="BCancelOnClick">Cancel</Button>
         </StackPanel>
     </Grid>
 </Window>
